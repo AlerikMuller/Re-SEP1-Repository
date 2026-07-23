@@ -28,11 +28,10 @@ public class DriverLicense {
 
         String[] parts = normalized.split("[, /]+");
         for (String part : parts) {
-            if (!part.equals("B") && !part.equals("C") && !part.equals("D")) {
-                throw new IllegalArgumentException("License type must be B, C, D, or a combination of them.");
+            if (!part.equals("MINI_BUS") && !part.equals("LARGE_BUS")) {
+                throw new IllegalArgumentException("License type must be MINI_BUS or LARGE_BUS or a combination of them.");
             }
         }
-
         this.licenseType = normalized;
     }
 

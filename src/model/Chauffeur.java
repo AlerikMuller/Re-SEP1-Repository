@@ -13,16 +13,16 @@ public class Chauffeur {
     private DriverLicense driverLicense;
 
     public Chauffeur(String name, String phone, int experienceYears, String preferenceNotes,
-                     boolean isAvailable, boolean isSuitable) {
+                     boolean isAvailable, boolean isSuitable, DriverLicense driverLicense) {
         this.workSchedules = new ArrayList<>();
-        setChauffeur(name, phone, experienceYears, preferenceNotes, isAvailable, isSuitable);
+        setChauffeur(name, phone, experienceYears, preferenceNotes, isAvailable, isSuitable, driverLicense);
     }
 
-    public Chauffeur(String name, String phone, int experienceYears, String preferenceNotes,
+   /* public Chauffeur(String name, String phone, int experienceYears, String preferenceNotes,
                      boolean isAvailable, boolean isSuitable, DriverLicense driverLicense) {
         this(name, phone, experienceYears, preferenceNotes, isAvailable, isSuitable);
         this.driverLicense = driverLicense;
-    }
+    }*/
 
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
@@ -63,7 +63,7 @@ public class Chauffeur {
     public void setPreferenceNotes(String preferenceNotes) {
         if (preferenceNotes == null || preferenceNotes.trim().isEmpty()) {
             this.preferenceNotes = "";
-        } else {
+        } else if((preferenceNotes.equals("Shorter trips") || preferenceNotes.equals("Longer trips") || preferenceNotes.equals("Customer wishes"))) {
             this.preferenceNotes = preferenceNotes.trim();
         }
     }
@@ -80,8 +80,11 @@ public class Chauffeur {
         return isAvailable;
     }
 
-    public void setSuitable(boolean suitable) {
-        this.isSuitable = suitable;
+    public void setSuitable(boolean suitable, String preferenceNotes, DriverLicense driverLicense) {
+       if((preferenceNotes.equals("Shorter trips") || preferenceNotes.equals("Longer trips")) && (driverLicense.equals("MINI_BUS") || driverLicense.equals("LARGE_BUS")))
+        {
+            this.isSuitable = suitable;
+        }
     }
 
     public boolean isSuitable() {
@@ -89,15 +92,20 @@ public class Chauffeur {
     }
 
     public void setChauffeur(String name, String phone, int experienceYears, String preferenceNotes,
-                             boolean isAvailable, boolean isSuitable) {
+                             boolean isAvailable, boolean isSuitable, DriverLicense driverLicense) {
         setName(name);
         setPhone(phone);
         setExperienceYears(experienceYears);
         setPreferenceNotes(preferenceNotes);
         setAvailable(isAvailable);
-        setSuitable(isSuitable);
+        setDriverLicense(driverLicense);
+        setSuitable(isSuitable, preferenceNotes, driverLicense);
     }
 
+    public void setDriverLicense(DriverLicense driverLicense)
+    {
+        this.driverLicense = driverLicense;
+    }
     public void addSchedule(WorkSchedule schedule) {
         if (schedule == null) {
             throw new IllegalArgumentException("Work schedule cannot be empty.");

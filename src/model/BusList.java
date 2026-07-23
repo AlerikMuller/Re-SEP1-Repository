@@ -11,14 +11,29 @@ public class BusList {
     }
 
     public void addBus(Bus bus) {
-        if (bus == null) {
-            throw new IllegalArgumentException("Bus cannot be null.");
+        if(!bus.isAvailable())
+        {
+            throw new IllegalArgumentException("Bus not available");
         }
-        buses.add(bus);
+        this.buses.add(bus);
     }
 
     public void removeBus(Bus bus) {
+        if(bus == null || buses.isEmpty()) {
+            throw new IllegalArgumentException("Bus cannot be null.");
+        }
         buses.remove(bus);
+    }
+
+    public void updateBusAvailability(boolean availability, Bus busToUpdate)
+    {
+        for(Bus bus : buses)
+            {
+            if(bus.getRegNo().equals(busToUpdate.getRegNo()))
+            {
+                bus.setAvailability(availability);
+            }
+            }
     }
 
     public Bus getBus(int index) {

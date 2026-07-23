@@ -44,14 +44,14 @@ public class Date implements Comparable<Date> {
 
     private void validateDate(int day, int month, int year) {
         try {
-            LocalDate.of(day, month, year);
+            LocalDate.of(year, month, day);
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid date.");
         }
     }
 
     private LocalDate toLocalDate() {
-        return LocalDate.of(day, month, year);
+        return LocalDate.of(year, month, day);
     }
 
     public boolean isBefore(Date other) {

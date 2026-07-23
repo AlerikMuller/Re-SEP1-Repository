@@ -21,18 +21,27 @@ public class WorkSchedule {
         if (day == null || day.trim().isEmpty()) {
             throw new IllegalArgumentException("Day cannot be empty.");
         }
-        this.day = day.trim();
+        if(day.equals("Sunday") || day.equals("Monday") || day.equals("Tuesday") || day.equals("Wednesday") ||  day.equals("Thursday") || day.equals("Friday") || day.equals("Saturday"))
+        {
+            this.day = day.trim();
+        }
     }
 
     public String getDay() {
         return day;
     }
 
-    public void setStatus(String status) {
-        if (status == null || status.trim().isEmpty()) {
-            throw new IllegalArgumentException("Work schedule status cannot be empty.");
+    public void setStatus(String status)
+    {
+        if (status == null || status.trim().isEmpty())
+        {
+            throw new IllegalArgumentException(
+                "Work schedule status cannot be empty.");
         }
-        this.status = status.trim();
+        if (status.equals("Active") || status.equals("OFF"))
+        {
+            this.status = status.trim();
+        }
     }
 
     public String getStatus() {

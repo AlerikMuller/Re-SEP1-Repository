@@ -11,14 +11,23 @@ public class TripList {
     }
 
     public void addTrip(Trip trip) {
-        if (trip == null) {
-            throw new IllegalArgumentException("Trip cannot be null.");
+        for(int i=0; i<trips.size(); i++)
+        {
+            if (trip.hasStarted() || trips.get(i).overlaps(trip))
+            {
+                throw new IllegalArgumentException("Trip already exists.");
+            }
         }
-        trips.add(trip);
-    }
+                trips.add(trip);
+        }
 
     public void removeTrip(Trip trip) {
-        trips.remove(trip);
+        if(trip == null || trips.isEmpty()) {
+            throw new IllegalArgumentException("Trip cannot be null.");
+        }
+        else if(trip.canBeRemoved()) {
+            trips.remove(trip);
+        }
     }
 
     public Trip getTrip(int index) {
@@ -33,6 +42,31 @@ public class TripList {
             }
         }
         return result;
+    }
+
+    public void changeUsualTripStatus(Trip tripToUpdate)
+    {
+        for(Trip trip : trips)
+        {
+            if (trip.getOrigin().equals(tripToUpdate.getOrigin())
+                || trip.getDestination().equals(tripToUpdate.getDestination())
+                || trip.getAssignedBus() == tripToUpdate.getAssignedBus()
+                || trip.getAssignedChauffeur()
+                == tripToUpdate.getAssignedChauffeur()
+                || trip.getDateInterval() == tripToUpdate.getDateInterval()
+                || trip.getTimeInterval() == tripToUpdate.getTimeInterval())
+            {
+                trip.setStatus(tripToUpdate.getStatus());
+            }
+        }
+    }
+    public void changeCustomerTripStatus(Trip tripToUpdate)
+    {
+        for(Trip trip : trips) {
+            if (trip.getOrigin().equals(tripToUpdate.getOrigin()) || trip.getDestination().equals(tripToUpdate.getDestination()) || trip.getAssignedBus() == tripToUpdate.getAssignedBus() || trip.getAssignedChauffeur() == tripToUpdate.getAssignedChauffeur() || trip.getDateInterval() == tripToUpdate.getDateInterval() || trip.getTimeInterval() == tripToUpdate.getTimeInterval() || trip.getCustomer() == tripToUpdate.getCustomer()) {
+                trip.setStatus(tripToUpdate.getStatus());
+            }
+        }
     }
 
     public TripList getPastTrips() {
@@ -50,6 +84,38 @@ public class TripList {
         return result;
     }
 
+    public void assignBusToTrip(Trip tripToAssign)
+    {
+        for (Trip trip : trips)
+        {
+            if (trip.getOrigin().equals(tripToAssign.getOrigin())
+                || trip.getDestination().equals(tripToAssign.getDestination())
+                || trip.getDateInterval() == tripToAssign.getDateInterval()
+                || trip.getTimeInterval() == tripToAssign.getTimeInterval())
+            {
+                if (trip.getAssignedChauffeur() == null && trip.getStatus()
+                    .equalsIgnoreCase("Not Started"))
+                {
+                    trip.assignBus(tripToAssign.getAssignedBus());
+                }
+            }
+        }
+    }
+
+    public void assignChauffeurToTrip(Trip tripToAssign)
+    {
+        for(Trip trip : trips)
+        {
+            if (trip.getOrigin().equals(tripToAssign.getOrigin()) || trip.getDestination().equals(tripToAssign.getDestination()) || trip.getDateInterval() == tripToAssign.getDateInterval() || trip.getTimeInterval() == tripToAssign.getTimeInterval())
+            {
+                if(trip.getAssignedChauffeur() != null && !trip.getStatus().equalsIgnoreCase("Not Started"))
+                {
+                   throw new IllegalArgumentException("Chauffeur already assigned.");
+                }
+                trip.assignChauffeur(tripToAssign.getAssignedChauffeur());
+            }
+        }
+    }
 
     public boolean hasOverlappingAssignment(Bus bus, Chauffeur chauffeur,
                                              DateInterval dateInterval, TimeInterval timeInterval) {

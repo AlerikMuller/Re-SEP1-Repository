@@ -22,11 +22,17 @@ public class Bus {
         return regNo;
     }
 
-    public void setType(String type) {
-        if (type == null || type.trim().isEmpty()) {
+    public void setType(String type)
+    {
+        if (type == null || type.trim().isEmpty())
+        {
             throw new IllegalArgumentException("Bus type cannot be empty.");
         }
-        this.type = type.trim();
+        if (type.equalsIgnoreCase("Mini bus") || type.equalsIgnoreCase(
+            "Large bus") || type.equalsIgnoreCase("Special purpose bus"))
+        {
+            this.type = type.trim();
+        }
     }
 
     public String getType() {
