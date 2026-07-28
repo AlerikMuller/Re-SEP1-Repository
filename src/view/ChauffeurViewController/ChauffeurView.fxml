@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChauffeurViewController">
+    <top>
+        <VBox alignment="CENTER" prefHeight="54.0" prefWidth="1000.0" spacing="5.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Chauffeur Management" wrapText="true">
+               <font>
+                  <Font size="24.0" />
+               </font></Label>
+            </children>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+        </VBox>
+    </top>
+    <left>
+        <GridPane hgap="8.0" vgap="8.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <children>
+                <Label text="Name" />
+                <Label text="Phone" GridPane.rowIndex="1" />
+                <Label text="Experience years" GridPane.rowIndex="2" />
+                <Label text="Preference" GridPane.rowIndex="3" />
+                <Label text="Available" GridPane.rowIndex="4" />
+                <Label text="Suitable" GridPane.rowIndex="5" />
+                <Label text="License number" GridPane.rowIndex="6" />
+                <Label text="License type" GridPane.rowIndex="7" />
+                <TextField fx:id="nameField" GridPane.columnIndex="1" />
+                <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="experienceField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="licenseNoField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <CheckBox fx:id="suitableCheckBox" mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <CheckBox fx:id="availableCheckBox" mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <ComboBox fx:id="preferenceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <ComboBox fx:id="licenseTypeBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            </children>
+        </GridPane>
+    </left>
+    <center>
+        <TableView fx:id="chauffeurTable" prefHeight="523.0" prefWidth="692.0" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn fx:id="nameColumn" prefWidth="124.0" text="Name" />
+                <TableColumn fx:id="phoneColumn" prefWidth="128.79998779296875" text="Phone" />
+                <TableColumn fx:id="experienceColumn" prefWidth="66.39999389648438" text="Experience" />
+                <TableColumn fx:id="preferenceColumn" prefWidth="107.199951171875" text="Preference" />
+                <TableColumn fx:id="availableColumn" prefWidth="68.0" text="Available" />
+                <TableColumn fx:id="suitableColumn" prefWidth="64.0" text="Suitable" />
+                <TableColumn fx:id="licenseColumn" prefWidth="138.39996337890625" text="License" />
+            </columns>
+        </TableView>
+    </center>
+    <right>
+        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Work Schedule" />
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="Day" />
+                        <Label text="Status" GridPane.rowIndex="1" />
+                        <Label text="Start date" GridPane.rowIndex="2" />
+                        <Label text="End date" GridPane.rowIndex="3" />
+                        <Label text="Start time" GridPane.rowIndex="4" />
+                        <Label text="End time" GridPane.rowIndex="5" />
+                        <ComboBox fx:id="dayBox" prefWidth="150.0" GridPane.columnIndex="1" />
+                        <ComboBox fx:id="scheduleStatusBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <DatePicker fx:id="scheduleStartDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <DatePicker fx:id="scheduleEndDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="scheduleStartTimeField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="scheduleEndTimeField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    </children>
+                </GridPane>
+                <Button mnemonicParsing="false" onAction="#addWorkSchedule" text="Add Schedule" />
+            </children>
+        </VBox>
+    </right>
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="1000.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <children>
+                <Button mnemonicParsing="false" onAction="#addChauffeur" text="Add Chauffeur" />
+                <Button mnemonicParsing="false" onAction="#viewChauffeur" text="View Chauffeur" />
+                <Button mnemonicParsing="false" onAction="#editChauffeur" text="Edit Chauffeur" />
+                <Button mnemonicParsing="false" onAction="#removeChauffeur" text="Remove Chauffeur" />
+                <Button mnemonicParsing="false" onAction="#clearFields" text="Clear" />
+                <Button mnemonicParsing="false" onAction="#back" text="Back" />
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

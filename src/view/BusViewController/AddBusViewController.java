@@ -18,15 +18,10 @@ public class AddBusViewController
   @FXML private Button addButton;
   @FXML private Button backButton;
 
-  @FXML private Label regNoLabel;
   @FXML private TextField regNoTextField;
-  @FXML private Label typeLabel;
   @FXML private TextField typeTextField;
-  @FXML private Label rentPricePerDayLabel;
   @FXML private TextField rentPricePerDayTextField;
-  @FXML private Label seatCapacityLabel;
   @FXML private TextField seatCapacityTextField;
-  @FXML private Label availabilityLabel;
   @FXML private TextField availabilityTextField;
 
   public void init(ViewHandler viewHandler, Scene scene,

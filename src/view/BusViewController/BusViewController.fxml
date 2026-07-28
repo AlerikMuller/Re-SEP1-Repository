@@ -10,21 +10,23 @@
    <children>
       <FlowPane alignment="TOP_CENTER" prefHeight="446.0" prefWidth="684.0">
          <children>
-            <TableView prefHeight="436.0" prefWidth="606.0">
+            <TableView fx:id="bussTableView" prefHeight="436.0" prefWidth="606.0">
               <columns>
-                <TableColumn prefWidth="105.59995573759079" text="RegNo" />
-                <TableColumn prefWidth="236.0000457763672" text="Type" />
-                  <TableColumn prefWidth="105.5999755859375" text="RentPricePerDay" />
-                  <TableColumn prefWidth="82.39999389648438" text="Seat capacity" />
-                  <TableColumn prefWidth="78.4000244140625" text="Availabilty" />
+                <TableColumn fx:id="regNoColumn" prefWidth="105.59995573759079" text="RegNo" />
+                <TableColumn fx:id="typeColumn" prefWidth="236.0000457763672" text="Type" />
+                  <TableColumn fx:id="rentPricePerDayColumn" prefWidth="105.5999755859375" text="RentPricePerDay" />
+                  <TableColumn fx:id="seatCapacityColumn" prefWidth="82.39999389648438" text="Seat capacity" />
+                  <TableColumn fx:id="availabilityColumn" prefWidth="78.4000244140625" text="Availabilty" />
               </columns>
             </TableView>
          </children>
       </FlowPane>
       <FlowPane alignment="CENTER" hgap="12.0" prefHeight="50.0" prefWidth="684.0">
          <children>
-            <Button mnemonicParsing="false" text="Refresh" />
-            <Button mnemonicParsing="false" text="Back" />
+            <Button fx:id="refreshButton" mnemonicParsing="false" text="Refresh" />
+            <Button mnemonicParsing="false" text="Remove" />
+            <Button mnemonicParsing="false" text="Update" />
+            <Button fx:id="backButton" mnemonicParsing="false" text="Back" />
          </children>
       </FlowPane>
    </children>

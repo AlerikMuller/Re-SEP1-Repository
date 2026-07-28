@@ -25,6 +25,11 @@ public class BusList {
         buses.remove(bus);
     }
 
+    public ArrayList<Bus> getAllBuses()
+    {
+        return this.buses;
+    }
+
     public void updateBusAvailability(boolean availability, Bus busToUpdate)
     {
         for(Bus bus : buses)
