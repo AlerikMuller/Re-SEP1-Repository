@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="420.0" prefWidth="520.0"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="View.MainViewController">
+
+    <top>
+        <MenuBar>
+            <menus>
+                <Menu text="File">
+                    <items>
+                        <MenuItem fx:id="exitMenuItem" text="Exit" onAction="#handleActions"/>
+                    </items>
+                </Menu>
+                <Menu text="Help">
+                    <items>
+                        <MenuItem fx:id="aboutMenuItem" text="About" onAction="#handleActions"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="24.0">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+
+            <Label text="Horsens Tours" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Label text="Trip Planning System" style="-fx-font-size: 14px; -fx-text-fill: #555;"/>
+
+            <GridPane hgap="12.0" vgap="12.0" alignment="CENTER">
+                <children>
+                    <Button fx:id="addBusButton" text="Add Bus" prefWidth="150.0"
+                            onAction="#handleActions"
+                            GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Button fx:id="manageBusButton" text="Manage Bus" prefWidth="150.0"
+                            onAction="#handleActions"
+                            GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Button fx:id="addCustomerButton" text="Add Customer" prefWidth="150.0"
+                            onAction="#handleActions"
+                            GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Button fx:id="manageCustomerButton" text="Manage Customer" prefWidth="150.0"
+                            onAction="#handleActions"
+                            GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Button fx:id="addChauffeurButton" text="Add Chauffeur" prefWidth="150.0"
+                            onAction="#handleActions"
+                            GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Button fx:id="manageChauffeurButton" text="Manage Chauffeur" prefWidth="150.0"
+                            onAction="#handleActions"
+                            GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                </children>
+            </GridPane>
+        </VBox>
+    </center>
+</BorderPane>

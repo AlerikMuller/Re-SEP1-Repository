@@ -18,7 +18,7 @@
     <Label text="Customers" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
     <!-- List of all customers -->
-    <TableView fx:id="customerTable" prefHeight="220.0">
+    <TableView fx:id="customerTable" prefHeight="220.0" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="nameColumn" text="Name" prefWidth="200.0"/>
             <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="150.0"/>
@@ -42,10 +42,11 @@
     <!-- Action buttons -->
     <HBox spacing="8.0">
         <children>
-            <Button fx:id="addButton" text="Add" onAction="#addCustomer"/>
-            <Button fx:id="editButton" text="Edit" onAction="#editCustomer"/>
-            <Button fx:id="removeButton" text="Remove" onAction="#removeCustomer"/>
-            <Button fx:id="clearButton" text="Clear" onAction="#reset"/>
+            <Button fx:id="addButton" text="Add" onAction="#handleActions"/>
+            <Button fx:id="editButton" text="Edit" onAction="#handleActions"/>
+            <Button fx:id="removeButton" text="Remove" onAction="#handleActions"/>
+            <Button fx:id="clearButton" text="Clear" onAction="#handleActions"/>
+            <Button fx:id="backButton" text="Back" onAction="#handleActions"/>
         </children>
     </HBox>
 
