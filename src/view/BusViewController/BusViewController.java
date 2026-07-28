@@ -36,6 +36,7 @@ public class BusViewController
   public void init(ViewHandler viewHandler, Scene scene,  TripPlanningModelManager modelManager)
   {
     this.modelManager = modelManager;
+    this.scene = scene;
     this.viewHandler = viewHandler;
     setUpTable();
     reset();

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="448.0" prefWidth="719.0" spacing="100.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="578.0" spacing="100.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.BusViewController.AddBusViewController">
    <children>
       <HBox alignment="CENTER" prefHeight="174.0" prefWidth="784.0" spacing="10.0">
          <children>
@@ -33,20 +33,20 @@
                   <Label prefHeight="18.0" prefWidth="146.0" text="Rent price per day : " GridPane.rowIndex="2" />
                   <Label text="Seat Capacity : " GridPane.rowIndex="3" />
                   <Label text="Is Available : " GridPane.rowIndex="4" />
-                  <TextField prefHeight="26.0" prefWidth="135.0" GridPane.columnIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField prefHeight="26.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <CheckBox mnemonicParsing="false" text="True" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <CheckBox mnemonicParsing="false" text="False" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <TextField fx:id="regNoTextField" prefHeight="26.0" prefWidth="135.0" promptText="registration number" GridPane.columnIndex="1" />
+                  <TextField fx:id="typeTextField" promptText="Enter type" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="rentPricePerDayTextField" prefHeight="26.0" prefWidth="166.0" promptText="Enter Rent Price per day" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="seatCapacityTextField" promptText="seat capacity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <RadioButton fx:id="availableRadioButton" mnemonicParsing="false" text="Availabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <RadioButton fx:id="unavailableRadioButton" mnemonicParsing="false" text="Unavailabel" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                </children>
             </GridPane>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="45.0" prefWidth="784.0" spacing="14.0">
          <children>
-            <Button mnemonicParsing="false" text="Add" />
-            <Button mnemonicParsing="false" text="Back" />
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleActions" text="Add" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleActions" text="Back" />
          </children>
       </HBox>
    </children>
