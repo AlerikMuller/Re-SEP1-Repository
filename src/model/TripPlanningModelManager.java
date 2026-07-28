@@ -173,14 +173,25 @@ public class TripPlanningModelManager
   {
       company.getAllTrips().assignChauffeurToTrip(tripToAssign);
   }
-  public void updateBusAvailability(boolean availability, Bus busToUpdate)
-  {
-    company.getAllBuses().updateBusAvailability(availability, busToUpdate);
-  }
   public void removeBus(Bus busToRemove)
   {
     company.getAllBuses().removeBus(busToRemove);
     saveCompany();
+  }
+
+  public void updateBus(Bus busToUpdate){
+    for(int i=0; i<company.getAllBuses().size(); i++)
+    {
+      Bus bus = company.getAllBuses().getBus(i);
+      if(bus == busToUpdate)
+      {
+        bus.setRegNo(busToUpdate.getRegNo());
+        bus.setType(busToUpdate.getType());
+        bus.setRentPricePerDay(busToUpdate.getRentPricePerDay());
+        bus.setSeatCapacity(busToUpdate.getSeatCapacity());
+        bus.setAvailability(busToUpdate.getAvailability());
+      }
+    }
   }
   public void updateChauffeur(Chauffeur chauffeurToUpdate){
    for(int i=0; i<company.getAllChauffeurs().size(); i++)

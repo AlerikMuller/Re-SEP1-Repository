@@ -23,10 +23,10 @@
       </FlowPane>
       <FlowPane alignment="CENTER" hgap="12.0" prefHeight="50.0" prefWidth="684.0">
          <children>
-            <Button fx:id="refreshButton" mnemonicParsing="false" text="Refresh" />
-            <Button mnemonicParsing="false" text="Remove" />
-            <Button mnemonicParsing="false" text="Update" />
-            <Button fx:id="backButton" mnemonicParsing="false" text="Back" />
+            <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#handleActions" text="Refresh" />
+            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handleActions" text="Remove" />
+            <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handleActions" text="Update" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleActions" text="Back" />
          </children>
       </FlowPane>
    </children>

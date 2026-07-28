@@ -9,6 +9,8 @@ public class StartGUI extends Application
   public void start(Stage window)
   {
     TripPlanningModelManager modelManager = new TripPlanningModelManager("company.json");
-
+    modelManager.loadCompany();
+    ViewHandler viewHandler = new ViewHandler(window, modelManager);
+    viewHandler.start();
   }
 }

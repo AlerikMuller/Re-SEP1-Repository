@@ -29,7 +29,7 @@ public class ViewHandler
     //kelsang
    loadViewBus();
    loadViewAddBus();
-   openView("AddBusView");
+   openView("BusMainView");
    //Giyath
     //Alerik
   }
@@ -92,7 +92,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("view/BusViewController/AddBusViewController.fxml"));
+      loader.setLocation(getClass().getResource("/view/BusViewController/AddBusViewController.fxml"));
       Region root = loader.load();
       addBusViewController = loader.getController();
       addBusViewController.init(this, new Scene(root), modelManager);

@@ -27,6 +27,12 @@ public class AddBusViewController
   @FXML private MenuItem exitMenuItem;
   @FXML private MenuItem aboutMenuItem;
 
+  @FXML public void initialize()
+  {
+    availabilityGroup = new ToggleGroup();
+    availableRadioButton.setToggleGroup(availabilityGroup);
+    unavailableRadioButton.setToggleGroup(availabilityGroup);
+  }
   public void init(ViewHandler viewHandler, Scene scene,
       TripPlanningModelManager modelManager)
   {
@@ -34,7 +40,6 @@ public class AddBusViewController
     this.scene = scene;
     this.modelManager = modelManager;
   }
-
   public void reset()
   {
     regNoTextField.clear();
@@ -42,7 +47,10 @@ public class AddBusViewController
     rentPricePerDayTextField.clear();
     seatCapacityTextField.clear();
 
-    availabilityGroup.selectToggle(null);
+    if (availabilityGroup != null)
+    {
+      availabilityGroup.selectToggle(null);
+    }
   }
 
   public Scene getScene()
@@ -55,24 +63,7 @@ public class AddBusViewController
   {
     if(e.getSource() == addButton)
     {
-      try
-      {
-        String regNo = regNoTextField.getText();
-        String type = typeTextField.getText();
-        float rentPricePerDay = Float.parseFloat(
-            rentPricePerDayTextField.getText());
-        int seatCapacity = Integer.parseInt(seatCapacityTextField.getText());
-        boolean availability = availableRadioButton.isSelected();
-
-        Bus bus = new Bus(regNo, type, rentPricePerDay, seatCapacity,
-            availability);
-        modelManager.addBus(bus);
-        reset();
-      }
-      catch (NumberFormatException ex)
-      {
-        showMessage("Rent price and seat capacity must be valid numbers.");
-      }
+        addBus();
     }
     else if (e.getSource() == backButton)
     {
@@ -80,29 +71,92 @@ public class AddBusViewController
     }
     else if (e.getSource() == exitMenuItem)
     {
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-          "Do you really want to exit the program?",
-          ButtonType.YES, ButtonType.NO);
-      alert.setTitle("Exit");
-      alert.setHeaderText(null);
-
-      alert.showAndWait();
-
-      if (alert.getResult() == ButtonType.YES)
-      {
-        System.exit(0);
-      }
+      exitProgram();
     }
     else if (e.getSource() == aboutMenuItem)
     {
-      Alert alert = new Alert(Alert.AlertType.INFORMATION);
-      alert.setHeaderText(null);
-      alert.setTitle("About");
-      alert.setContentText("This is just a little program that demonstrates some of the GUI features in Java");
-      alert.showAndWait();
+      showAbout();
     }
   }
+  private void addBus()
+  {
+    if (regNoTextField.getText().isBlank()
+        || typeTextField.getText().isBlank()
+        || rentPricePerDayTextField.getText().isBlank()
+        || seatCapacityTextField.getText().isBlank())
+    {
+      showMessage("Please fill in all fields.");
+      return;
+    }
+    if(availabilityGroup.getSelectedToggle() == null)
+    {
+      showMessage("Please select availability.");
+      return;
+    }
+    try
+    {
+      String regNo = regNoTextField.getText().trim();
+      String type = typeTextField.getText().trim();
 
+      float rentPricePerDay = Float.parseFloat(
+          rentPricePerDayTextField.getText().trim());
+      int seatCapacity = Integer.parseInt(seatCapacityTextField.getText().trim());
+
+      boolean availability = availableRadioButton.isSelected();
+
+      //Check duplicate registration number
+      for(Bus existingBus :
+                  modelManager.getAllBuses().getAllBuses())
+      {
+        if(existingBus.getRegNo().equalsIgnoreCase(regNo))
+        {
+          showMessage("A bus with this registration number already exists.");
+          return;
+        }
+      }
+
+      Bus bus = new Bus(regNo, type, rentPricePerDay, seatCapacity,
+          availability);
+
+      modelManager.addBus(bus);
+      modelManager.saveCompany();
+
+      showMessage("Bus successfully added.");
+
+      reset();
+    }
+    catch (NumberFormatException ex)
+    {
+      showMessage("Rent price and seat capacity must be valid numbers.");
+    }
+    catch (IllegalArgumentException ex)
+    {
+      showMessage(ex.getMessage());
+    }
+  }
+  private void exitProgram()
+  {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+        "Do you really want to exit the program?",
+        ButtonType.YES, ButtonType.NO);
+    alert.setTitle("Exit");
+    alert.setHeaderText(null);
+
+    alert.showAndWait();
+
+    if (alert.getResult() == ButtonType.YES)
+    {
+      System.exit(0);
+    }
+  }
+  private void showAbout()
+  {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("About");
+    alert.setHeaderText(null);
+    alert.setContentText("This is a JavaFX bus management applications.");
+    alert.showAndWait();
+  }
   private void showMessage(String message)
   {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
