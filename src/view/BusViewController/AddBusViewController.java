@@ -1,5 +1,6 @@
 package view.BusViewController;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -16,6 +17,8 @@ public class AddBusViewController
 
   @FXML private Button addButton;
   @FXML private Button backButton;
+
+  @FXML private ComboBox<String> busTypeBox;
 
   @FXML private TextField regNoTextField;
   @FXML private TextField typeTextField;
@@ -39,11 +42,15 @@ public class AddBusViewController
     this.viewHandler = viewHandler;
     this.scene = scene;
     this.modelManager = modelManager;
+    setupComboBox();
   }
   public void reset()
   {
     regNoTextField.clear();
-    typeTextField.clear();
+    if(busTypeBox!=null)
+    {
+      busTypeBox.setValue(null);
+    }
     rentPricePerDayTextField.clear();
     seatCapacityTextField.clear();
 
@@ -81,14 +88,14 @@ public class AddBusViewController
   private void addBus()
   {
     if (regNoTextField.getText().isBlank()
-        || typeTextField.getText().isBlank()
+        || busTypeBox.getValue().isBlank()
         || rentPricePerDayTextField.getText().isBlank()
         || seatCapacityTextField.getText().isBlank())
     {
       showMessage("Please fill in all fields.");
       return;
     }
-    if(availabilityGroup.getSelectedToggle() == null)
+    else if(availabilityGroup.getSelectedToggle() == null)
     {
       showMessage("Please select availability.");
       return;
@@ -96,7 +103,8 @@ public class AddBusViewController
     try
     {
       String regNo = regNoTextField.getText().trim();
-      String type = typeTextField.getText().trim();
+      String type = getComboValue(busTypeBox);
+          //typeTextField.getText().trim();
 
       float rentPricePerDay = Float.parseFloat(
           rentPricePerDayTextField.getText().trim());
@@ -132,6 +140,24 @@ public class AddBusViewController
     catch (IllegalArgumentException ex)
     {
       showMessage(ex.getMessage());
+    }
+  }
+  private String getComboValue(ComboBox<String> comboBox)
+  {
+    if (comboBox == null || comboBox.getValue() == null || comboBox.getValue().trim().isEmpty())
+    {
+      throw new IllegalArgumentException("Type" + " must be selected.");
+    }
+
+    return comboBox.getValue().trim();
+  }
+  private void setupComboBox()
+  {
+    if(busTypeBox!=null)
+    {
+      busTypeBox.setItems(FXCollections.observableArrayList(
+          "Mini bus","Large bus"
+      ));
     }
   }
   private void exitProgram()

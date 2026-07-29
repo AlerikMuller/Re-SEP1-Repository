@@ -35,12 +35,6 @@ public class BusViewController
   @FXML private Button updateButton;
   @FXML private Button backButton;
 
-  private String tempRegNo;
-  private String tempType;
-  private String tempRentPrice;
-  private String tempSeatCapacity;
-  private String tempAvailability;
-
 
   public void init(ViewHandler viewHandler, Scene scene,  TripPlanningModelManager modelManager)
   {
@@ -147,6 +141,13 @@ public class BusViewController
             String.valueOf(
                 selectedBus.getSeatCapacity()));
 
+    TextField availability =
+        new TextField(
+            String.valueOf(
+                selectedBus.getAvailability()
+            )
+        );
+
 
     VBox box = new VBox(10,
         new Label("Registration Number"),
@@ -159,7 +160,10 @@ public class BusViewController
         price,
 
         new Label("Seats"),
-        seats
+        seats,
+
+        new Label("Availability"),
+        availability
     );
 
 
@@ -181,6 +185,8 @@ public class BusViewController
 
           selectedBus.setSeatCapacity(
               Integer.parseInt(seats.getText()));
+          selectedBus.setAvailability(
+              Boolean.parseBoolean(availability.getText()));
 
 
           return selectedBus;
