@@ -12,6 +12,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane prefHeight="420.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainViewController.MainViewController">
 
     <top>
@@ -36,6 +38,12 @@
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
+
+            <ImageView fitHeight="80.0" preserveRatio="true">
+                <image>
+                    <Image url="@vialogoah.gif"/>
+                </image>
+            </ImageView>
 
             <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Horsens Tours" />
             <Label style="-fx-font-size: 14px; -fx-text-fill: #555;" text="Trip Planning System" />
