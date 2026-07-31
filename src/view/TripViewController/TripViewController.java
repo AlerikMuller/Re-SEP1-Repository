@@ -6,8 +6,26 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import model.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import model.Bus;
+import model.BusList;
+import model.Chauffeur;
+import model.ChauffeurList;
+import model.Customer;
+import model.CustomerList;
+import model.DateInterval;
+import model.Time;
+import model.TimeInterval;
+import model.Trip;
+import model.TripList;
+import model.TripPlanningModelManager;
 import view.ViewHandler;
 
 import java.time.LocalDate;
@@ -39,68 +57,87 @@ public class TripViewController
   @FXML private Button registerTripButton;
   @FXML private Button editTripButton;
   @FXML private Button removeTripButton;
-  @FXML private Button assignBusChauffeurButton;
-  @FXML private Button changeStatusButton;
   @FXML private Button viewPastTripButton;
+  @FXML private Button refreshTripsButton;
   @FXML private Button clearButton;
   @FXML private Button backButton;
+  @FXML private Button deselectCustomerButton;
+  @FXML private Button deselectBusButton;
+  @FXML private Button deselectChauffeurButton;
 
   private TripPlanningModelManager modelManager;
   private Scene scene;
   private boolean showingPastTrips;
   private ViewHandler viewHandler;
+  private final ObservableList<Trip> tripRows = FXCollections.observableArrayList();
 
   public void init(ViewHandler viewHandler, Scene scene, TripPlanningModelManager modelManager)
   {
     this.modelManager = modelManager;
     this.scene = scene;
     this.viewHandler = viewHandler;
-
+    showingPastTrips = false;
     setupStatusBox();
     setupTableColumns();
     setupTripSelection();
     refreshAll();
   }
 
-  public Scene getScene(){
+  public Scene getScene()
+  {
     return scene;
   }
-  public void reset(){}
+
+  public void reset()
+  {
+    refreshAll();
+  }
+
   @FXML
   public void handleActions(ActionEvent e)
   {
-    if(e.getSource() == registerTripButton){
-      //trip registration
+    if (e.getSource() == registerTripButton)
+    {
       registerTrip();
     }
-    else if(e.getSource() == editTripButton){
-      //update trip
+    else if (e.getSource() == editTripButton)
+    {
       editTrip();
     }
-    else if(e.getSource() == removeTripButton){
-      //delete any trip
+    else if (e.getSource() == removeTripButton)
+    {
       removeTrip();
     }
-    else if(e.getSource() == backButton){
+    else if (e.getSource() == backButton)
+    {
       viewHandler.openView("MainView");
     }
-    else if(e.getSource() == assignBusChauffeurButton){
-      //assign bus and chauffeur
-      assignBusAndChauffeur();
-    }
-    else if(e.getSource()==changeStatusButton){
-      //change status
-      changeTripStatus();
-    }
-    else if(e.getSource() == viewPastTripButton){
-      //view past trips
+    else if (e.getSource() == viewPastTripButton)
+    {
       viewPastTrips();
     }
-    else if(e.getSource() == clearButton){
-      //clear text fields
+    else if (e.getSource() == refreshTripsButton)
+    {
+      showAllTrips();
+    }
+    else if (e.getSource() == clearButton)
+    {
       clearFields();
     }
+    else if (e.getSource() == deselectCustomerButton)
+    {
+      deselectComboBox(customerBox);
+    }
+    else if (e.getSource() == deselectBusButton)
+    {
+      deselectComboBox(busBox);
+    }
+    else if (e.getSource() == deselectChauffeurButton)
+    {
+      deselectComboBox(chauffeurBox);
+    }
   }
+
   private void setupStatusBox()
   {
     if (statusBox == null)
@@ -109,10 +146,10 @@ public class TripViewController
     }
 
     statusBox.setItems(FXCollections.observableArrayList(
-        "Not Started",
-        "Started",
-        "Cancelled",
-        "Ended"
+            "Not Started",
+            "Started",
+            "Cancelled",
+            "Ended"
     ));
     statusBox.setValue("Not Started");
   }
@@ -121,32 +158,27 @@ public class TripViewController
   {
     if (originColumn != null)
     {
-      originColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(data.getValue().getOrigin()));
+      originColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getOrigin()));
     }
 
     if (destinationColumn != null)
     {
-      destinationColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(data.getValue().getDestination()));
+      destinationColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getDestination()));
     }
 
     if (statusColumn != null)
     {
-      statusColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(data.getValue().getStatus()));
+      statusColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getStatus()));
     }
 
     if (dateIntervalColumn != null)
     {
-      dateIntervalColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(data.getValue().getDateIntervalString()));
+      dateIntervalColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getDateIntervalString()));
     }
 
     if (timeIntervalColumn != null)
     {
-      timeIntervalColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(data.getValue().getTimeIntervalString()));
+      timeIntervalColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getTimeIntervalString()));
     }
 
     if (customerColumn != null)
@@ -154,7 +186,7 @@ public class TripViewController
       customerColumn.setCellValueFactory(data ->
       {
         Customer customer = data.getValue().getCustomer();
-        return new ReadOnlyStringWrapper(customer == null ? "" : customer.toString());
+        return new ReadOnlyStringWrapper(customer == null ? "" : customer.getName() + " (" + customer.getPhone() + ")");
       });
     }
 
@@ -163,7 +195,7 @@ public class TripViewController
       busColumn.setCellValueFactory(data ->
       {
         Bus bus = data.getValue().getAssignedBus();
-        return new ReadOnlyStringWrapper(bus == null ? "" : bus.toString());
+        return new ReadOnlyStringWrapper(bus == null ? "" : bus.getRegNo());
       });
     }
 
@@ -172,8 +204,13 @@ public class TripViewController
       chauffeurColumn.setCellValueFactory(data ->
       {
         Chauffeur chauffeur = data.getValue().getAssignedChauffeur();
-        return new ReadOnlyStringWrapper(chauffeur == null ? "" : chauffeur.toString());
+        return new ReadOnlyStringWrapper(chauffeur == null ? "" : chauffeur.getName());
       });
+    }
+
+    if (tripTableView != null)
+    {
+      tripTableView.setItems(tripRows);
     }
   }
 
@@ -185,13 +222,13 @@ public class TripViewController
     }
 
     tripTableView.getSelectionModel().selectedItemProperty().addListener(
-        (observableValue, oldTrip, selectedTrip) ->
-        {
-          if (selectedTrip != null)
-          {
-            fillFieldsFromTrip(selectedTrip);
-          }
-        });
+            (observableValue, oldTrip, selectedTrip) ->
+            {
+              if (selectedTrip != null)
+              {
+                fillFieldsFromTrip(selectedTrip);
+              }
+            });
   }
 
   private void refreshAll()
@@ -204,32 +241,40 @@ public class TripViewController
 
   private void refreshTrips()
   {
-    if (tripTableView == null)
+    if (tripTableView == null || modelManager == null)
     {
       return;
     }
 
-    TripList tripList = showingPastTrips
-        ? modelManager.getAllTripsByStatus("Ended")
-        : modelManager.getAllTrips();
-
-    ObservableList<Trip> trips = FXCollections.observableArrayList();
+    Trip selectedTrip = tripTableView.getSelectionModel().getSelectedItem();
+    TripList tripList = showingPastTrips ? modelManager.getAllTripsByStatus("Ended") : modelManager.getAllTrips();
+    tripRows.clear();
 
     for (int i = 0; i < tripList.size(); i++)
     {
-      trips.add(tripList.getTrip(i));
+      tripRows.add(tripList.getTrip(i));
     }
 
-    tripTableView.setItems(trips);
+    if (selectedTrip != null && tripRows.contains(selectedTrip))
+    {
+      tripTableView.getSelectionModel().select(selectedTrip);
+    }
+    else
+    {
+      tripTableView.getSelectionModel().clearSelection();
+    }
+
+    tripTableView.refresh();
   }
 
   private void refreshCustomers()
   {
-    if (customerBox == null)
+    if (customerBox == null || modelManager == null)
     {
       return;
     }
 
+    Customer selectedCustomer = customerBox.getValue();
     CustomerList customerList = modelManager.getAllCustomers();
     ObservableList<Customer> customers = FXCollections.observableArrayList();
 
@@ -239,15 +284,23 @@ public class TripViewController
     }
 
     customerBox.setItems(customers);
+
+    if (selectedCustomer != null && !customers.contains(selectedCustomer))
+    {
+      customers.add(selectedCustomer);
+    }
+
+    customerBox.setValue(selectedCustomer);
   }
 
   private void refreshBuses()
   {
-    if (busBox == null)
+    if (busBox == null || modelManager == null)
     {
       return;
     }
 
+    Bus selectedBus = busBox.getValue();
     BusList busList = modelManager.getAllAvailableBuses(true);
     ObservableList<Bus> buses = FXCollections.observableArrayList();
 
@@ -256,20 +309,25 @@ public class TripViewController
       buses.add(busList.getBus(i));
     }
 
+    if (selectedBus != null && !buses.contains(selectedBus))
+    {
+      buses.add(selectedBus);
+    }
+
     busBox.setItems(buses);
+    busBox.setValue(selectedBus);
   }
 
   private void refreshChauffeurs()
   {
-    if (chauffeurBox == null)
+    if (chauffeurBox == null || modelManager == null)
     {
       return;
     }
 
+    Chauffeur selectedChauffeur = chauffeurBox.getValue();
     ChauffeurList chauffeurList = modelManager.getAllSuitableChauffeurs(true, true);
 
-    // Fallback because the current Chauffeur.setSuitable(...) method in the model
-    // may not correctly mark chauffeurs as suitable.
     if (chauffeurList.size() == 0)
     {
       chauffeurList = modelManager.getAllChauffeurs();
@@ -286,7 +344,13 @@ public class TripViewController
       }
     }
 
+    if (selectedChauffeur != null && !chauffeurs.contains(selectedChauffeur))
+    {
+      chauffeurs.add(selectedChauffeur);
+    }
+
     chauffeurBox.setItems(chauffeurs);
+    chauffeurBox.setValue(selectedChauffeur);
   }
 
   @FXML
@@ -304,32 +368,15 @@ public class TripViewController
 
       modelManager.registerTrip(trip);
       modelManager.saveCompany();
-
       showingPastTrips = false;
       refreshAll();
       clearFields();
-
       showConfirmation("Trip registered successfully.");
     }
     catch (Exception e)
     {
       showError(e.getMessage());
     }
-  }
-
-  @FXML
-  private void viewTrip()
-  {
-    Trip selectedTrip = getSelectedTrip();
-
-    if (selectedTrip == null)
-    {
-      showError("Please select a trip to view.");
-      return;
-    }
-
-    fillFieldsFromTrip(selectedTrip);
-    showConfirmation("Trip details loaded.");
   }
 
   @FXML
@@ -343,43 +390,38 @@ public class TripViewController
       return;
     }
 
+    if (!selectedTrip.canBeEdited())
+    {
+      showError("The selected trip cannot be edited with its current status.");
+      return;
+    }
+
     try
     {
-      selectedTrip.setOrigin(getText(originField, "Origin"));
-      selectedTrip.setDestination(getText(destinationField, "Destination"));
+      Trip proposedTrip = createTripFromFieldsForEdit();
 
-      if (statusBox != null && statusBox.getValue() != null)
-      {
-        selectedTrip.setStatus(statusBox.getValue());
-      }
-
-      selectedTrip.setDateInterval(createDateInterval());
-      selectedTrip.setTimeInterval(createTimeInterval());
-
-      if (customerBox != null && customerBox.getValue() != null)
-      {
-        selectedTrip.setCustomer(customerBox.getValue());
-      }
-
-      if (busBox != null && busBox.getValue() != null)
-      {
-        selectedTrip.assignBus(busBox.getValue());
-      }
-
-      if (chauffeurBox != null && chauffeurBox.getValue() != null)
-      {
-        selectedTrip.assignChauffeur(chauffeurBox.getValue());
-      }
-
-      if (hasOverlappingAssignment(selectedTrip, selectedTrip))
+      if (hasOverlappingAssignment(proposedTrip, selectedTrip))
       {
         showError("The selected bus or chauffeur is already assigned to another overlapping trip.");
         return;
       }
 
-      modelManager.saveCompany();
-      refreshAll();
+      selectedTrip.setOrigin(proposedTrip.getOrigin());
+      selectedTrip.setDestination(proposedTrip.getDestination());
+      selectedTrip.setStatus(proposedTrip.getStatus());
+      selectedTrip.setDateInterval(proposedTrip.getDateInterval());
+      selectedTrip.setTimeInterval(proposedTrip.getTimeInterval());
+      selectedTrip.assignBus(proposedTrip.getAssignedBus());
+      selectedTrip.assignChauffeur(proposedTrip.getAssignedChauffeur());
+      selectedTrip.setCustomer(proposedTrip.getCustomer());
 
+      modelManager.updateTrip(selectedTrip);
+      modelManager.saveCompany();
+      showingPastTrips = false;
+      refreshAll();
+      tripTableView.getSelectionModel().select(selectedTrip);
+      fillFieldsFromTrip(selectedTrip);
+      tripTableView.refresh();
       showConfirmation("Trip updated successfully.");
     }
     catch (Exception e)
@@ -399,6 +441,12 @@ public class TripViewController
       return;
     }
 
+    if (!selectedTrip.canBeRemoved())
+    {
+      showError("The selected trip cannot be removed with its current status.");
+      return;
+    }
+
     if (!confirm("Remove Trip", "Are you sure you want to remove the selected trip?"))
     {
       return;
@@ -408,102 +456,10 @@ public class TripViewController
     {
       modelManager.removeTrip(selectedTrip);
       modelManager.saveCompany();
-
+      showingPastTrips = false;
       refreshAll();
       clearFields();
-
       showConfirmation("Trip removed successfully.");
-    }
-    catch (Exception e)
-    {
-      showError(e.getMessage());
-    }
-  }
-
-  @FXML
-  private void assignBusAndChauffeur()
-  {
-    Trip selectedTrip = getSelectedTrip();
-
-    if (selectedTrip == null)
-    {
-      showError("Please select a trip first.");
-      return;
-    }
-
-    if (busBox == null || busBox.getValue() == null)
-    {
-      showError("Please select a bus.");
-      return;
-    }
-
-    if (chauffeurBox == null || chauffeurBox.getValue() == null)
-    {
-      showError("Please select a chauffeur.");
-      return;
-    }
-
-    try
-    {
-      selectedTrip.assignBus(busBox.getValue());
-      selectedTrip.assignChauffeur(chauffeurBox.getValue());
-
-      if (hasOverlappingAssignment(selectedTrip, selectedTrip))
-      {
-        showError("The selected bus or chauffeur is already assigned to another overlapping trip.");
-        return;
-      }
-
-      modelManager.saveCompany();
-      refreshAll();
-
-      showConfirmation("Bus and chauffeur assigned successfully.");
-    }
-    catch (Exception e)
-    {
-      showError(e.getMessage());
-    }
-  }
-
-  @FXML
-  private void displayAvailableBuses()
-  {
-    refreshBuses();
-    showConfirmation("Available buses loaded.");
-  }
-
-  @FXML
-  private void displaySuitableChauffeurs()
-  {
-    refreshChauffeurs();
-    showConfirmation("Suitable chauffeurs loaded.");
-  }
-
-  @FXML
-  private void changeTripStatus()
-  {
-    Trip selectedTrip = getSelectedTrip();
-
-    if (selectedTrip == null)
-    {
-      showError("Please select a trip first.");
-      return;
-    }
-
-    if (statusBox == null || statusBox.getValue() == null)
-    {
-      showError("Please select a status.");
-      return;
-    }
-
-    try
-    {
-      selectedTrip.setStatus(statusBox.getValue());
-      modelManager.changeTripStatus(selectedTrip);
-      modelManager.saveCompany();
-
-      refreshAll();
-      showConfirmation("Trip status changed successfully.");
     }
     catch (Exception e)
     {
@@ -517,6 +473,14 @@ public class TripViewController
     showingPastTrips = true;
     refreshTrips();
     showConfirmation("Past trips loaded.");
+  }
+
+  @FXML
+  private void showAllTrips()
+  {
+    showingPastTrips = false;
+    refreshAll();
+    showConfirmation("All trips loaded.");
   }
 
   @FXML
@@ -557,20 +521,9 @@ public class TripViewController
       endTimeField.clear();
     }
 
-    if (customerBox != null)
-    {
-      customerBox.setValue(null);
-    }
-
-    if (busBox != null)
-    {
-      busBox.setValue(null);
-    }
-
-    if (chauffeurBox != null)
-    {
-      chauffeurBox.setValue(null);
-    }
+    deselectComboBox(customerBox);
+    deselectComboBox(busBox);
+    deselectComboBox(chauffeurBox);
 
     if (tripTableView != null)
     {
@@ -578,37 +531,50 @@ public class TripViewController
     }
   }
 
-  @FXML
-  private void back()
+  private void deselectComboBox(ComboBox<?> comboBox)
   {
-    showConfirmation("Back button pressed. View navigation can be connected later through ViewHandler.");
+    if (comboBox != null)
+    {
+      comboBox.getSelectionModel().clearSelection();
+      comboBox.setValue(null);
+    }
   }
 
   private Trip createTripFromFields()
   {
+    Bus bus = busBox == null ? null : busBox.getValue();
+    Chauffeur chauffeur = chauffeurBox == null ? null : chauffeurBox.getValue();
+    Customer customer = customerBox == null ? null : customerBox.getValue();
+
+    return createTripFromValues(bus, chauffeur, customer);
+  }
+
+  private Trip createTripFromFieldsForEdit()
+  {
+    Bus bus = busBox == null ? null : busBox.getValue();
+    Chauffeur chauffeur = chauffeurBox == null ? null : chauffeurBox.getValue();
+    Customer customer = customerBox == null ? null : customerBox.getValue();
+
+    return createTripFromValues(bus, chauffeur, customer);
+  }
+
+  private Trip createTripFromValues(Bus bus, Chauffeur chauffeur, Customer customer)
+  {
+    if (bus == null)
+    {
+      throw new IllegalArgumentException("Please select an assigned bus.");
+    }
+
+    if (chauffeur == null)
+    {
+      throw new IllegalArgumentException("Please select an assigned chauffeur.");
+    }
+
     String origin = getText(originField, "Origin");
     String destination = getText(destinationField, "Destination");
-    String status = statusBox == null || statusBox.getValue() == null
-        ? "Not Started"
-        : statusBox.getValue();
-
+    String status = statusBox == null || statusBox.getValue() == null ? "Not Started" : statusBox.getValue();
     DateInterval dateInterval = createDateInterval();
-    TimeInterval timeInterval = createTimeInterval();
-
-    if (busBox == null || busBox.getValue() == null)
-    {
-      throw new IllegalArgumentException("Please select an available bus.");
-    }
-
-    if (chauffeurBox == null || chauffeurBox.getValue() == null)
-    {
-      throw new IllegalArgumentException("Please select a suitable chauffeur.");
-    }
-
-    Bus bus = busBox.getValue();
-    Chauffeur chauffeur = chauffeurBox.getValue();
-
-    Customer customer = customerBox == null ? null : customerBox.getValue();
+    TimeInterval timeInterval = createTimeInterval(dateInterval);
 
     if (customer == null)
     {
@@ -636,21 +602,22 @@ public class TripViewController
     return new DateInterval(startDate, endDate);
   }
 
-  private TimeInterval createTimeInterval()
+  private TimeInterval createTimeInterval(DateInterval dateInterval)
   {
     Time startTime = parseTime(getText(startTimeField, "Start time"));
     Time endTime = parseTime(getText(endTimeField, "End time"));
+
+    if (dateInterval.getStartDate().equals(dateInterval.getEndDate()) && !startTime.isBefore(endTime))
+    {
+      throw new IllegalArgumentException("Start time must be before end time when the trip starts and ends on the same date.");
+    }
 
     return new TimeInterval(startTime, endTime);
   }
 
   private model.Date convertLocalDate(LocalDate localDate)
   {
-    return new model.Date(
-        localDate.getDayOfMonth(),
-        localDate.getMonthValue(),
-        localDate.getYear()
-    );
+    return new model.Date(localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear());
   }
 
   private LocalDate convertModelDate(model.Date date)
@@ -660,13 +627,14 @@ public class TripViewController
 
   private Time parseTime(String text)
   {
-    String[] parts = text.trim().split(":");
+    String trimmed = text.trim();
 
-    if (parts.length != 2 && parts.length != 3)
+    if (!trimmed.matches("^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"))
     {
-      throw new IllegalArgumentException("Time must be written as HH:mm or HH:mm:ss.");
+      throw new IllegalArgumentException("Time must use 24-hour format HH:mm or HH:mm:ss.");
     }
 
+    String[] parts = trimmed.split(":");
     int hour = Integer.parseInt(parts[0]);
     int minute = Integer.parseInt(parts[1]);
     int second = parts.length == 3 ? Integer.parseInt(parts[2]) : 0;
@@ -700,6 +668,10 @@ public class TripViewController
     {
       return;
     }
+
+    refreshCustomers();
+    refreshBuses();
+    refreshChauffeurs();
 
     if (originField != null)
     {
@@ -738,17 +710,44 @@ public class TripViewController
 
     if (customerBox != null)
     {
+      ensureCustomerIsSelectable(trip.getCustomer());
       customerBox.setValue(trip.getCustomer());
     }
 
     if (busBox != null)
     {
+      ensureBusIsSelectable(trip.getAssignedBus());
       busBox.setValue(trip.getAssignedBus());
     }
 
     if (chauffeurBox != null)
     {
+      ensureChauffeurIsSelectable(trip.getAssignedChauffeur());
       chauffeurBox.setValue(trip.getAssignedChauffeur());
+    }
+  }
+
+  private void ensureCustomerIsSelectable(Customer customer)
+  {
+    if (customer != null && customerBox != null && !customerBox.getItems().contains(customer))
+    {
+      customerBox.getItems().add(customer);
+    }
+  }
+
+  private void ensureBusIsSelectable(Bus bus)
+  {
+    if (bus != null && busBox != null && !busBox.getItems().contains(bus))
+    {
+      busBox.getItems().add(bus);
+    }
+  }
+
+  private void ensureChauffeurIsSelectable(Chauffeur chauffeur)
+  {
+    if (chauffeur != null && chauffeurBox != null && !chauffeurBox.getItems().contains(chauffeur))
+    {
+      chauffeurBox.getItems().add(chauffeur);
     }
   }
 
@@ -783,9 +782,7 @@ public class TripViewController
     alert.setTitle(title);
     alert.setHeaderText(null);
     alert.setContentText(message);
-
     Optional<ButtonType> result = alert.showAndWait();
-
     return result.isPresent() && result.get() == ButtonType.OK;
   }
 

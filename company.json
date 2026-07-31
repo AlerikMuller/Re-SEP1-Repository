@@ -1,0 +1,153 @@
+{
+  "allBuses": {
+    "buses": [
+      {
+        "regNo": "1234",
+        "type": "Large bus",
+        "rentPricePerDay": 120.0,
+        "seatCapacity": 56,
+        "isAvailable": true
+      }
+    ]
+  },
+  "allChauffeurs": {
+    "chauffeurs": [
+      {
+        "name": "Lucas",
+        "phone": "20202020",
+        "experienceYears": 10,
+        "preferenceNotes": "Shorter trips",
+        "isAvailable": true,
+        "isSuitable": true,
+        "workSchedules": [
+          {
+            "day": "Saturday",
+            "status": "Active",
+            "dateInterval": {
+              "startDate": {
+                "day": 3,
+                "month": 8,
+                "year": 2026
+              },
+              "endDate": {
+                "day": 5,
+                "month": 8,
+                "year": 2026
+              }
+            },
+            "timeInterval": {
+              "startTime": {
+                "hour": 12,
+                "minute": 0,
+                "second": 0
+              },
+              "endTime": {
+                "hour": 13,
+                "minute": 0,
+                "second": 0
+              }
+            }
+          }
+        ],
+        "driverLicense": {
+          "licenseNo": "123456",
+          "licenseType": "LARGE_BUS"
+        }
+      }
+    ]
+  },
+  "allCustomers": {
+    "customers": [
+      {
+        "name": "Alerik",
+        "phone": "50505050"
+      }
+    ]
+  },
+  "allTrips": {
+    "trips": [
+      {
+        "origin": "Horsens",
+        "destination": "Odense",
+        "status": "Not Started",
+        "assignedBus": {
+          "regNo": "1234",
+          "type": "Large bus",
+          "rentPricePerDay": 120.0,
+          "seatCapacity": 56,
+          "isAvailable": true
+        },
+        "assignedChauffeur": {
+          "name": "Lucas",
+          "phone": "20202020",
+          "experienceYears": 10,
+          "preferenceNotes": "Shorter trips",
+          "isAvailable": true,
+          "isSuitable": true,
+          "workSchedules": [
+            {
+              "day": "Saturday",
+              "status": "Active",
+              "dateInterval": {
+                "startDate": {
+                  "day": 3,
+                  "month": 8,
+                  "year": 2026
+                },
+                "endDate": {
+                  "day": 5,
+                  "month": 8,
+                  "year": 2026
+                }
+              },
+              "timeInterval": {
+                "startTime": {
+                  "hour": 12,
+                  "minute": 0,
+                  "second": 0
+                },
+                "endTime": {
+                  "hour": 13,
+                  "minute": 0,
+                  "second": 0
+                }
+              }
+            }
+          ],
+          "driverLicense": {
+            "licenseNo": "123456",
+            "licenseType": "LARGE_BUS"
+          }
+        },
+        "dateInterval": {
+          "startDate": {
+            "day": 1,
+            "month": 8,
+            "year": 2026
+          },
+          "endDate": {
+            "day": 2,
+            "month": 8,
+            "year": 2026
+          }
+        },
+        "timeInterval": {
+          "startTime": {
+            "hour": 6,
+            "minute": 0,
+            "second": 0
+          },
+          "endTime": {
+            "hour": 7,
+            "minute": 0,
+            "second": 0
+          }
+        },
+        "customer": {
+          "name": "Alerik",
+          "phone": "50505050"
+        }
+      }
+    ]
+  }
+}

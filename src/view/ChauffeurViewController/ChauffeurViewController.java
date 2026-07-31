@@ -3,11 +3,24 @@ package view.ChauffeurViewController;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import model.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import model.Chauffeur;
+import model.ChauffeurList;
+import model.DateInterval;
+import model.DriverLicense;
+import model.Time;
+import model.TimeInterval;
+import model.TripPlanningModelManager;
+import model.WorkSchedule;
 import view.ViewHandler;
 
 import java.time.LocalDate;
@@ -41,100 +54,69 @@ public class ChauffeurViewController
   @FXML private TableColumn<Chauffeur, String> suitableColumn;
   @FXML private TableColumn<Chauffeur, String> licenseColumn;
 
-  @FXML private Button addChauffeurButton;
-  @FXML private Button viewChauffeurButton;
-  @FXML private Button editChauffeurButton;
-  @FXML private Button removeChauffeurButton;
-  @FXML private Button clearChauffeurButton;
-  @FXML private Button backButton;
-
   private TripPlanningModelManager modelManager;
   private ViewHandler viewHandler;
   private Scene scene;
-
+  private final ObservableList<Chauffeur> chauffeurRows = FXCollections.observableArrayList();
 
   public void init(ViewHandler viewHandler, Scene scene, TripPlanningModelManager modelManager)
   {
     this.modelManager = modelManager;
     this.scene = scene;
     this.viewHandler = viewHandler;
-
     setupComboBoxes();
     setupTableColumns();
-    refreshChauffeurs();
     setupChauffeurSelection();
+    refreshChauffeurs();
   }
-public Scene getScene(){
-    return scene;
-}
-public void reset(){}
 
-  @FXML
-  public void handleActions(ActionEvent e)
+  public Scene getScene()
   {
-    if(e.getSource() == addChauffeurButton)
-    {
-      //registering chauffeur
-      addChauffeur();
-    }
-    else if(e.getSource() == viewChauffeurButton)
-    {
-      viewChauffeur();
-    }
-    else if(e.getSource() == removeChauffeurButton)
-    {
-      removeChauffeur();
-    }
-    else if(e.getSource() == editChauffeurButton)
-    {
-      editChauffeur();
-    }
-    else if(e.getSource() == clearChauffeurButton)
-    {
-      clearFields();
-    }
-    else if(e.getSource() == backButton)
-    {
-      back();
-    }
+    return scene;
   }
+
+  public void reset()
+  {
+    refreshChauffeurs();
+  }
+
   private void setupComboBoxes()
   {
     if (preferenceBox != null)
     {
       preferenceBox.setItems(FXCollections.observableArrayList(
-          "Shorter trips",
-          "Longer trips",
-          "Customer wishes"
+              "Shorter trips",
+              "Longer trips",
+              "Customer wishes"
       ));
     }
 
     if (licenseTypeBox != null)
     {
       licenseTypeBox.setItems(FXCollections.observableArrayList(
-          "MINI_BUS",
-          "LARGE_BUS"
+              "MINI_BUS",
+              "LARGE_BUS"
       ));
     }
 
     if (dayBox != null)
     {
       dayBox.setItems(FXCollections.observableArrayList(
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday"
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
       ));
     }
 
     if (scheduleStatusBox != null)
     {
       scheduleStatusBox.setItems(FXCollections.observableArrayList(
-          "Active",
-          "OFF"
+              "Active",
+              "OFF"
       ));
     }
 
@@ -153,38 +135,32 @@ public void reset(){}
   {
     if (nameColumn != null)
     {
-      nameColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(data.getValue().getName()));
+      nameColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getName()));
     }
 
     if (phoneColumn != null)
     {
-      phoneColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(data.getValue().getPhone()));
+      phoneColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getPhone()));
     }
 
     if (experienceColumn != null)
     {
-      experienceColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(String.valueOf(data.getValue().getExperienceYears())));
+      experienceColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(String.valueOf(data.getValue().getExperienceYears())));
     }
 
     if (preferenceColumn != null)
     {
-      preferenceColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(data.getValue().getPreferenceNotes()));
+      preferenceColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getPreferenceNotes()));
     }
 
     if (availableColumn != null)
     {
-      availableColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(String.valueOf(data.getValue().isAvailable())));
+      availableColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(String.valueOf(data.getValue().isAvailable())));
     }
 
     if (suitableColumn != null)
     {
-      suitableColumn.setCellValueFactory(data ->
-          new ReadOnlyStringWrapper(String.valueOf(data.getValue().isSuitable())));
+      suitableColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(String.valueOf(data.getValue().isSuitable())));
     }
 
     if (licenseColumn != null)
@@ -192,8 +168,13 @@ public void reset(){}
       licenseColumn.setCellValueFactory(data ->
       {
         DriverLicense license = data.getValue().getDrivingLicense();
-        return new ReadOnlyStringWrapper(license == null ? "" : license.toString());
+        return new ReadOnlyStringWrapper(license == null ? "" : license.getLicenseNo() + " " + license.getLicenseType());
       });
+    }
+
+    if (chauffeurTableView != null)
+    {
+      chauffeurTableView.setItems(chauffeurRows);
     }
   }
 
@@ -205,31 +186,41 @@ public void reset(){}
     }
 
     chauffeurTableView.getSelectionModel().selectedItemProperty().addListener(
-        (observableValue, oldChauffeur, selectedChauffeur) ->
-        {
-          if (selectedChauffeur != null)
-          {
-            fillFieldsFromChauffeur(selectedChauffeur);
-          }
-        });
+            (observableValue, oldChauffeur, selectedChauffeur) ->
+            {
+              if (selectedChauffeur != null)
+              {
+                fillFieldsFromChauffeur(selectedChauffeur);
+              }
+            });
   }
 
   private void refreshChauffeurs()
   {
-    if (chauffeurTableView == null)
+    if (chauffeurTableView == null || modelManager == null)
     {
       return;
     }
 
+    Chauffeur selectedChauffeur = chauffeurTableView.getSelectionModel().getSelectedItem();
     ChauffeurList chauffeurList = modelManager.getAllChauffeurs();
-    ObservableList<Chauffeur> chauffeurs = FXCollections.observableArrayList();
+    chauffeurRows.clear();
 
     for (int i = 0; i < chauffeurList.size(); i++)
     {
-      chauffeurs.add(chauffeurList.getChauffeur(i));
+      chauffeurRows.add(chauffeurList.getChauffeur(i));
     }
 
-    chauffeurTableView.setItems(chauffeurs);
+    if (selectedChauffeur != null && chauffeurRows.contains(selectedChauffeur))
+    {
+      chauffeurTableView.getSelectionModel().select(selectedChauffeur);
+    }
+    else
+    {
+      chauffeurTableView.getSelectionModel().clearSelection();
+    }
+
+    chauffeurTableView.refresh();
   }
 
   @FXML
@@ -238,8 +229,8 @@ public void reset(){}
     try
     {
       Chauffeur chauffeur = createChauffeurFromFields();
-
       WorkSchedule schedule = createOptionalScheduleFromFields();
+
       if (schedule != null)
       {
         chauffeur.addSchedule(schedule);
@@ -247,31 +238,14 @@ public void reset(){}
 
       modelManager.addChauffeur(chauffeur);
       modelManager.saveCompany();
-
       refreshChauffeurs();
       clearFields();
-
       showConfirmation("Chauffeur added successfully.");
     }
     catch (Exception e)
     {
       showError(e.getMessage());
     }
-  }
-
-  @FXML
-  private void viewChauffeur()
-  {
-    Chauffeur selectedChauffeur = getSelectedChauffeur();
-
-    if (selectedChauffeur == null)
-    {
-      showError("Please select a chauffeur to view.");
-      return;
-    }
-
-    fillFieldsFromChauffeur(selectedChauffeur);
-    showConfirmation("Chauffeur details loaded.");
   }
 
   @FXML
@@ -288,33 +262,19 @@ public void reset(){}
     try
     {
       DriverLicense driverLicense = createDriverLicenseFromFields();
-
       selectedChauffeur.setName(getText(nameField, "Name"));
       selectedChauffeur.setPhone(getText(phoneField, "Phone"));
       selectedChauffeur.setExperienceYears(parseExperienceYears());
       selectedChauffeur.setPreferenceNotes(getComboValue(preferenceBox, "Preference"));
       selectedChauffeur.setAvailable(availableCheckBox == null || availableCheckBox.isSelected());
       selectedChauffeur.setDriverLicense(driverLicense);
-
-      if (suitableCheckBox != null)
-      {
-        selectedChauffeur.setSuitable(
-            suitableCheckBox.isSelected(),
-            selectedChauffeur.getPreferenceNotes(),
-            driverLicense
-        );
-      }
-
-      WorkSchedule schedule = createOptionalScheduleFromFields();
-      if (schedule != null)
-      {
-        selectedChauffeur.addSchedule(schedule);
-      }
-
+      selectedChauffeur.setSuitable(suitableCheckBox == null || suitableCheckBox.isSelected(), selectedChauffeur.getPreferenceNotes(), driverLicense);
       modelManager.updateChauffeur(selectedChauffeur);
       modelManager.saveCompany();
-
       refreshChauffeurs();
+      chauffeurTableView.getSelectionModel().select(selectedChauffeur);
+      fillFieldsFromChauffeur(selectedChauffeur);
+      chauffeurTableView.refresh();
       showConfirmation("Chauffeur updated successfully.");
     }
     catch (Exception e)
@@ -343,10 +303,8 @@ public void reset(){}
     {
       modelManager.removeChauffeur(selectedChauffeur);
       modelManager.saveCompany();
-
       refreshChauffeurs();
       clearFields();
-
       showConfirmation("Chauffeur removed successfully.");
     }
     catch (Exception e)
@@ -370,11 +328,12 @@ public void reset(){}
     {
       WorkSchedule schedule = createRequiredScheduleFromFields();
       selectedChauffeur.addSchedule(schedule);
-
       modelManager.updateChauffeur(selectedChauffeur);
       modelManager.saveCompany();
-
       refreshChauffeurs();
+      chauffeurTableView.getSelectionModel().select(selectedChauffeur);
+      fillFieldsFromChauffeur(selectedChauffeur);
+      chauffeurTableView.refresh();
       showConfirmation("Work schedule added successfully.");
     }
     catch (Exception e)
@@ -470,7 +429,6 @@ public void reset(){}
   @FXML
   private void back()
   {
-//    showConfirmation("Back button pressed. View navigation can be connected later through ViewHandler.");
     viewHandler.openView("MainView");
   }
 
@@ -482,37 +440,20 @@ public void reset(){}
     String preferenceNotes = getComboValue(preferenceBox, "Preference");
     boolean available = availableCheckBox == null || availableCheckBox.isSelected();
     boolean suitable = suitableCheckBox == null || suitableCheckBox.isSelected();
-
     DriverLicense driverLicense = createDriverLicenseFromFields();
-
-    return new Chauffeur(
-        name,
-        phone,
-        experienceYears,
-        preferenceNotes,
-        available,
-        suitable,
-        driverLicense
-    );
+    return new Chauffeur(name, phone, experienceYears, preferenceNotes, available, suitable, driverLicense);
   }
 
   private DriverLicense createDriverLicenseFromFields()
   {
     String licenseNo = getText(licenseNoField, "License number");
     String licenseType = getComboValue(licenseTypeBox, "License type");
-
     return new DriverLicense(licenseNo, licenseType);
   }
 
   private WorkSchedule createOptionalScheduleFromFields()
   {
-    boolean hasAnyScheduleInput =
-        hasComboValue(dayBox) ||
-            hasComboValue(scheduleStatusBox) ||
-            hasDateValue(scheduleStartDatePicker) ||
-            hasDateValue(scheduleEndDatePicker) ||
-            hasText(scheduleStartTimeField) ||
-            hasText(scheduleEndTimeField);
+    boolean hasAnyScheduleInput = hasComboValue(dayBox) || hasComboValue(scheduleStatusBox) || hasDateValue(scheduleStartDatePicker) || hasDateValue(scheduleEndDatePicker) || hasText(scheduleStartTimeField) || hasText(scheduleEndTimeField);
 
     if (!hasAnyScheduleInput)
     {
@@ -527,13 +468,12 @@ public void reset(){}
     String day = getComboValue(dayBox, "Day");
     String status = getComboValue(scheduleStatusBox, "Schedule status");
     DateInterval dateInterval = createScheduleDateInterval();
-
     boolean hasStartTime = hasText(scheduleStartTimeField);
     boolean hasEndTime = hasText(scheduleEndTimeField);
 
     if (hasStartTime || hasEndTime)
     {
-      TimeInterval timeInterval = createScheduleTimeInterval();
+      TimeInterval timeInterval = createScheduleTimeInterval(dateInterval);
       return new WorkSchedule(day, status, dateInterval, timeInterval);
     }
 
@@ -554,14 +494,18 @@ public void reset(){}
 
     model.Date startDate = convertLocalDate(scheduleStartDatePicker.getValue());
     model.Date endDate = convertLocalDate(scheduleEndDatePicker.getValue());
-
     return new DateInterval(startDate, endDate);
   }
 
-  private TimeInterval createScheduleTimeInterval()
+  private TimeInterval createScheduleTimeInterval(DateInterval dateInterval)
   {
     Time startTime = parseTime(getText(scheduleStartTimeField, "Schedule start time"));
     Time endTime = parseTime(getText(scheduleEndTimeField, "Schedule end time"));
+
+    if (dateInterval.getStartDate().equals(dateInterval.getEndDate()) && !startTime.isBefore(endTime))
+    {
+      throw new IllegalArgumentException("Start time must be before end time when the schedule starts and ends on the same date.");
+    }
 
     return new TimeInterval(startTime, endTime);
   }
@@ -589,27 +533,23 @@ public void reset(){}
 
   private Time parseTime(String text)
   {
-    String[] parts = text.trim().split(":");
+    String trimmed = text.trim();
 
-    if (parts.length != 2 && parts.length != 3)
+    if (!trimmed.matches("^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"))
     {
-      throw new IllegalArgumentException("Time must be written as HH:mm or HH:mm:ss.");
+      throw new IllegalArgumentException("Time must use 24-hour format HH:mm or HH:mm:ss.");
     }
 
+    String[] parts = trimmed.split(":");
     int hour = Integer.parseInt(parts[0]);
     int minute = Integer.parseInt(parts[1]);
     int second = parts.length == 3 ? Integer.parseInt(parts[2]) : 0;
-
     return new Time(hour, minute, second);
   }
 
   private model.Date convertLocalDate(LocalDate localDate)
   {
-    return new model.Date(
-        localDate.getDayOfMonth(),
-        localDate.getMonthValue(),
-        localDate.getYear()
-    );
+    return new model.Date(localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear());
   }
 
   private LocalDate convertModelDate(model.Date date)
@@ -761,6 +701,18 @@ public void reset(){}
         scheduleEndTimeField.setText(schedule.getTimeInterval().getEndTime().toString());
       }
     }
+    else
+    {
+      if (scheduleStartTimeField != null)
+      {
+        scheduleStartTimeField.clear();
+      }
+
+      if (scheduleEndTimeField != null)
+      {
+        scheduleEndTimeField.clear();
+      }
+    }
   }
 
   private boolean confirm(String title, String message)
@@ -769,9 +721,7 @@ public void reset(){}
     alert.setTitle(title);
     alert.setHeaderText(null);
     alert.setContentText(message);
-
     Optional<ButtonType> result = alert.showAndWait();
-
     return result.isPresent() && result.get() == ButtonType.OK;
   }
 

@@ -1,6 +1,7 @@
 package model;
 
-public class Trip {
+public class Trip
+{
     private String origin;
     private String destination;
     private String status;
@@ -13,8 +14,9 @@ public class Trip {
     public Trip()
     {
     }
-    public Trip(String origin, String destination, String status, Bus assignedBus,
-                Chauffeur assignedChauffeur, DateInterval dateInterval, TimeInterval timeInterval) {
+
+    public Trip(String origin, String destination, String status, Bus assignedBus, Chauffeur assignedChauffeur, DateInterval dateInterval, TimeInterval timeInterval)
+    {
         setOrigin(origin);
         setDestination(destination);
         setStatus(status);
@@ -32,166 +34,201 @@ public class Trip {
         setDateInterval(dateInterval);
         setTimeInterval(timeInterval);
     }
-    public Trip(String origin, String destination, String status, Bus assignedBus,
-                Chauffeur assignedChauffeur, DateInterval dateInterval,
-                TimeInterval timeInterval, Customer customer) {
+
+    public Trip(String origin, String destination, String status, Bus assignedBus, Chauffeur assignedChauffeur, DateInterval dateInterval, TimeInterval timeInterval, Customer customer)
+    {
         this(origin, destination, status, assignedBus, assignedChauffeur, dateInterval, timeInterval);
-        setStatus(status);
         setCustomer(customer);
     }
 
-    public void setOrigin(String originAddress) {
-        if (originAddress == null || originAddress.trim().isEmpty()) {
+    public void setOrigin(String originAddress)
+    {
+        if (originAddress == null || originAddress.trim().isEmpty())
+        {
             throw new IllegalArgumentException("Origin address cannot be empty.");
         }
+
         this.origin = originAddress.trim();
     }
 
-    public String getOrigin() {
+    public String getOrigin()
+    {
         return origin;
     }
 
-    public void setDestination(String destination) {
-        if (destination == null || destination.trim().isEmpty()) {
+    public void setDestination(String destination)
+    {
+        if (destination == null || destination.trim().isEmpty())
+        {
             throw new IllegalArgumentException("Destination address cannot be empty.");
         }
+
         this.destination = destination.trim();
     }
 
-    public String getDestination() {
+    public String getDestination()
+    {
         return destination;
     }
 
-    public void setStatus(String status) {
-        if(!(status.equalsIgnoreCase("Not Started") || status.equalsIgnoreCase("Started") || status.equalsIgnoreCase("Cancelled") || status.equalsIgnoreCase("Ended")))
+    public void setStatus(String status)
+    {
+        if (status == null || status.trim().isEmpty())
         {
-        throw new IllegalArgumentException("Status must be either 'Not Started' or 'Started' or 'Cancelled' or 'Ended'.");
-    }
-        this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-   /* private String normalizeStatus(String status) {
-        if (status == null || status.trim().isEmpty()) {
             throw new IllegalArgumentException("Trip status cannot be empty.");
         }
 
-        String normalized = status.trim().toLowerCase();
-
-        switch (normalized) {
-            case "not started":
-            case "notstarted":
-            case "waiting":
-                return "Not Started";
-            case "started":
-                return "Started";
-            case "cancelled":
-            case "canceled":
-                return "Cancelled";
-            case "ended":
-                return "Ended";
-            default:
-                throw new IllegalArgumentException("Status must be Not Started, Started, Cancelled, or Ended.");
+        if (!(status.equalsIgnoreCase("Not Started") || status.equalsIgnoreCase("Started") || status.equalsIgnoreCase("Cancelled") || status.equalsIgnoreCase("Ended")))
+        {
+            throw new IllegalArgumentException("Status must be either 'Not Started' or 'Started' or 'Cancelled' or 'Ended'.");
         }
-    }*/
 
-    public void assignBus(Bus bus) {
-        if (bus == null) {
-           throw  new IllegalArgumentException("Assigned Bus cannot be null.");
+        if (status.equalsIgnoreCase("Not Started"))
+        {
+            this.status = "Not Started";
         }
+        else if (status.equalsIgnoreCase("Started"))
+        {
+            this.status = "Started";
+        }
+        else if (status.equalsIgnoreCase("Cancelled"))
+        {
+            this.status = "Cancelled";
+        }
+        else
+        {
+            this.status = "Ended";
+        }
+    }
+
+    public String getStatus()
+    {
+        return status;
+    }
+
+    public void assignBus(Bus bus)
+    {
+        if (bus == null)
+        {
+            throw new IllegalArgumentException("Assigned Bus cannot be null.");
+        }
+
         this.assignedBus = bus;
     }
 
     public boolean isBusAssigned()
     {
-        return assignedBus!=null;
+        return assignedBus != null;
     }
-    public Bus getAssignedBus() {
+
+    public Bus getAssignedBus()
+    {
         return assignedBus;
     }
 
-    public void assignChauffeur(Chauffeur chauffeur) {
-        if (chauffeur == null) {
+    public void assignChauffeur(Chauffeur chauffeur)
+    {
+        if (chauffeur == null)
+        {
             throw new IllegalArgumentException("Assigned chauffeur cannot be empty.");
         }
+
         this.assignedChauffeur = chauffeur;
     }
 
-    public Chauffeur getAssignedChauffeur() {
+    public Chauffeur getAssignedChauffeur()
+    {
         return assignedChauffeur;
     }
 
-    public void setDateInterval(DateInterval dateInterval) {
-        if (dateInterval == null) {
+    public void setDateInterval(DateInterval dateInterval)
+    {
+        if (dateInterval == null)
+        {
             throw new IllegalArgumentException("Date interval cannot be empty.");
         }
+
         this.dateInterval = dateInterval;
     }
 
-    public DateInterval getDateInterval() {
+    public DateInterval getDateInterval()
+    {
         return dateInterval;
     }
 
-    public String getDateIntervalString() {
-        return dateInterval.toString();
+    public String getDateIntervalString()
+    {
+        return dateInterval == null ? "" : dateInterval.toString();
     }
 
-    public void setTimeInterval(TimeInterval timeInterval) {
-        if (timeInterval == null) {
+    public void setTimeInterval(TimeInterval timeInterval)
+    {
+        if (timeInterval == null)
+        {
             throw new IllegalArgumentException("Time interval cannot be empty.");
         }
+
         this.timeInterval = timeInterval;
     }
 
-    public TimeInterval getTimeInterval() {
+    public TimeInterval getTimeInterval()
+    {
         return timeInterval;
     }
 
-    public String getTimeIntervalString() {
-        return timeInterval.toString();
+    public String getTimeIntervalString()
+    {
+        return timeInterval == null ? "" : timeInterval.toString();
     }
 
-    public void setCustomer(String name, String phone) {
+    public void setCustomer(String name, String phone)
+    {
         this.customer = new Customer(name, phone);
     }
 
-    public Customer getCustomer() {
+    public Customer getCustomer()
+    {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
-        if (customer == null) {
-            throw new IllegalArgumentException("Customer cannot be empty.");
-        }
+    public void setCustomer(Customer customer)
+    {
         this.customer = customer;
     }
 
-    public boolean canBeEdited() {
+    public void removeCustomer()
+    {
+        this.customer = null;
+    }
+
+    public boolean canBeEdited()
+    {
         return status.equals("Not Started") || status.equals("Cancelled") || status.equals("Ended");
     }
 
-    public boolean canBeRemoved() {
+    public boolean canBeRemoved()
+    {
         return status.equals("Not Started") || status.equals("Cancelled") || status.equals("Ended");
     }
 
-    public boolean hasStarted() {
+    public boolean hasStarted()
+    {
         return status.equals("Started") || status.equals("Ended");
     }
 
-    public boolean overlaps(Trip other) {
-        if (other == null) {
+    public boolean overlaps(Trip other)
+    {
+        if (other == null)
+        {
             throw new IllegalArgumentException("Other trip cannot be empty.");
         }
 
-        return this.dateInterval.overlaps(other.dateInterval) &&
-                this.timeInterval.overlaps(other.timeInterval);
+        return this.dateInterval.overlaps(other.dateInterval) && this.timeInterval.overlaps(other.timeInterval);
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Trip{" +
                 "origin='" + origin + '\'' +
                 ", destination='" + destination + '\'' +
