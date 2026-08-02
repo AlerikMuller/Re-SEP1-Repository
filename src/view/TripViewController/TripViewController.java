@@ -54,7 +54,6 @@ public class TripViewController
   @FXML private TableColumn<Trip, String> busColumn;
   @FXML private TableColumn<Trip, String> chauffeurColumn;
 
-  @FXML private Button registerTripButton;
   @FXML private Button editTripButton;
   @FXML private Button removeTripButton;
   @FXML private Button viewPastTripButton;
@@ -96,11 +95,7 @@ public class TripViewController
   @FXML
   public void handleActions(ActionEvent e)
   {
-    if (e.getSource() == registerTripButton)
-    {
-      registerTrip();
-    }
-    else if (e.getSource() == editTripButton)
+    if (e.getSource() == editTripButton)
     {
       editTrip();
     }
@@ -140,18 +135,11 @@ public class TripViewController
 
   private void setupStatusBox()
   {
-    if (statusBox == null)
+    if (statusBox != null)
     {
-      return;
+      statusBox.setItems(FXCollections.observableArrayList("Not Started", "Started", "Cancelled", "Ended"));
+      statusBox.setValue("Not Started");
     }
-
-    statusBox.setItems(FXCollections.observableArrayList(
-            "Not Started",
-            "Started",
-            "Cancelled",
-            "Ended"
-    ));
-    statusBox.setValue("Not Started");
   }
 
   private void setupTableColumns()
@@ -211,6 +199,7 @@ public class TripViewController
     if (tripTableView != null)
     {
       tripTableView.setItems(tripRows);
+      tripTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
   }
 
@@ -338,6 +327,7 @@ public class TripViewController
     for (int i = 0; i < chauffeurList.size(); i++)
     {
       Chauffeur chauffeur = chauffeurList.getChauffeur(i);
+
       if (chauffeur.isAvailable())
       {
         chauffeurs.add(chauffeur);
@@ -351,32 +341,6 @@ public class TripViewController
 
     chauffeurBox.setItems(chauffeurs);
     chauffeurBox.setValue(selectedChauffeur);
-  }
-
-  @FXML
-  private void registerTrip()
-  {
-    try
-    {
-      Trip trip = createTripFromFields();
-
-      if (hasOverlappingAssignment(trip, null))
-      {
-        showError("The selected bus or chauffeur is already assigned to another overlapping trip.");
-        return;
-      }
-
-      modelManager.registerTrip(trip);
-      modelManager.saveCompany();
-      showingPastTrips = false;
-      refreshAll();
-      clearFields();
-      showConfirmation("Trip registered successfully.");
-    }
-    catch (Exception e)
-    {
-      showError(e.getMessage());
-    }
   }
 
   @FXML
@@ -540,26 +504,12 @@ public class TripViewController
     }
   }
 
-  private Trip createTripFromFields()
-  {
-    Bus bus = busBox == null ? null : busBox.getValue();
-    Chauffeur chauffeur = chauffeurBox == null ? null : chauffeurBox.getValue();
-    Customer customer = customerBox == null ? null : customerBox.getValue();
-
-    return createTripFromValues(bus, chauffeur, customer);
-  }
-
   private Trip createTripFromFieldsForEdit()
   {
     Bus bus = busBox == null ? null : busBox.getValue();
     Chauffeur chauffeur = chauffeurBox == null ? null : chauffeurBox.getValue();
     Customer customer = customerBox == null ? null : customerBox.getValue();
 
-    return createTripFromValues(bus, chauffeur, customer);
-  }
-
-  private Trip createTripFromValues(Bus bus, Chauffeur chauffeur, Customer customer)
-  {
     if (bus == null)
     {
       throw new IllegalArgumentException("Please select an assigned bus.");

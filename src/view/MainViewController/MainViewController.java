@@ -16,7 +16,7 @@ public class MainViewController
   private TripPlanningModelManager modelManager;
   private ViewHandler viewHandler;
 
-  @FXML private Button createNewTripButton;
+  @FXML private Button addNewTripButton;
   @FXML private Button manageTripButton;
   @FXML private Button addBusButton;
   @FXML private Button manageBusButton;
@@ -48,41 +48,41 @@ public class MainViewController
   {
     if (e.getSource() == addCustomerButton || e.getSource() == manageCustomerButton)
     {
-      // Both open the Customer view (it handles add + manage in one screen).
       viewHandler.openView("CustomerView");
     }
     else if (e.getSource() == manageBusButton)
     {
       viewHandler.openView("BusMainView");
     }
-    else if(e.getSource() == addChauffeurButton || e.getSource() == manageChauffeurButton)
-    {
-      viewHandler.openView("ChauffeurView");
-    }
-    else if(e.getSource() == addBusButton)
+    else if (e.getSource() == addBusButton)
     {
       viewHandler.openView("AddBusView");
     }
-    else if(e.getSource() == createNewTripButton || e.getSource() == manageTripButton)
+    else if (e.getSource() == addNewTripButton)
+    {
+      viewHandler.openView("AddTripView");
+    }
+    else if (e.getSource() == manageTripButton)
     {
       viewHandler.openView("TripView");
     }
-   /*   // These views belong to teammates and aren't on this branch yet.
-      Alert alert = new Alert(Alert.AlertType.INFORMATION);
-      alert.setTitle("Not available yet");
-      alert.setHeaderText(null);
-      alert.setContentText("This section is still being implemented by another team member.");
-      alert.showAndWait();
+    else if (e.getSource() == addChauffeurButton)
+    {
+      viewHandler.openView("AddChauffeurView");
     }
-    */
+    else if (e.getSource() == manageChauffeurButton)
+    {
+      viewHandler.openView("ChauffeurView");
+    }
     else if (e.getSource() == exitMenuItem)
     {
       Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-          "Do you really want to exit the program?",
-          ButtonType.YES, ButtonType.NO);
+              "Do you really want to exit the program?",
+              ButtonType.YES, ButtonType.NO);
       alert.setTitle("Exit");
       alert.setHeaderText("Trip Planning Company");
       alert.showAndWait();
+
       if (alert.getResult() == ButtonType.YES)
       {
         System.exit(0);
@@ -93,8 +93,7 @@ public class MainViewController
       Alert alert = new Alert(Alert.AlertType.INFORMATION);
       alert.setHeaderText("Trip Planning Company");
       alert.setTitle("About");
-      alert.setContentText("Trip planning system for Horsens Tours — manage buses, "
-          + "chauffeurs, customers and trips.");
+      alert.setContentText("Trip planning system for Horsens Tours — manage buses, chauffeurs, customers and trips.");
       alert.showAndWait();
     }
   }

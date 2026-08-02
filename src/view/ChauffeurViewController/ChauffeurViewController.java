@@ -84,40 +84,22 @@ public class ChauffeurViewController
   {
     if (preferenceBox != null)
     {
-      preferenceBox.setItems(FXCollections.observableArrayList(
-              "Shorter trips",
-              "Longer trips",
-              "Customer wishes"
-      ));
+      preferenceBox.setItems(FXCollections.observableArrayList("Shorter trips", "Longer trips", "Customer wishes"));
     }
 
     if (licenseTypeBox != null)
     {
-      licenseTypeBox.setItems(FXCollections.observableArrayList(
-              "MINI_BUS",
-              "LARGE_BUS"
-      ));
+      licenseTypeBox.setItems(FXCollections.observableArrayList("MINI_BUS", "LARGE_BUS"));
     }
 
     if (dayBox != null)
     {
-      dayBox.setItems(FXCollections.observableArrayList(
-              "Sunday",
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday"
-      ));
+      dayBox.setItems(FXCollections.observableArrayList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"));
     }
 
     if (scheduleStatusBox != null)
     {
-      scheduleStatusBox.setItems(FXCollections.observableArrayList(
-              "Active",
-              "OFF"
-      ));
+      scheduleStatusBox.setItems(FXCollections.observableArrayList("Active", "OFF"));
     }
 
     if (availableCheckBox != null)
@@ -175,6 +157,7 @@ public class ChauffeurViewController
     if (chauffeurTableView != null)
     {
       chauffeurTableView.setItems(chauffeurRows);
+      chauffeurTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
   }
 
@@ -221,31 +204,6 @@ public class ChauffeurViewController
     }
 
     chauffeurTableView.refresh();
-  }
-
-  @FXML
-  private void addChauffeur()
-  {
-    try
-    {
-      Chauffeur chauffeur = createChauffeurFromFields();
-      WorkSchedule schedule = createOptionalScheduleFromFields();
-
-      if (schedule != null)
-      {
-        chauffeur.addSchedule(schedule);
-      }
-
-      modelManager.addChauffeur(chauffeur);
-      modelManager.saveCompany();
-      refreshChauffeurs();
-      clearFields();
-      showConfirmation("Chauffeur added successfully.");
-    }
-    catch (Exception e)
-    {
-      showError(e.getMessage());
-    }
   }
 
   @FXML
@@ -432,35 +390,11 @@ public class ChauffeurViewController
     viewHandler.openView("MainView");
   }
 
-  private Chauffeur createChauffeurFromFields()
-  {
-    String name = getText(nameField, "Name");
-    String phone = getText(phoneField, "Phone");
-    int experienceYears = parseExperienceYears();
-    String preferenceNotes = getComboValue(preferenceBox, "Preference");
-    boolean available = availableCheckBox == null || availableCheckBox.isSelected();
-    boolean suitable = suitableCheckBox == null || suitableCheckBox.isSelected();
-    DriverLicense driverLicense = createDriverLicenseFromFields();
-    return new Chauffeur(name, phone, experienceYears, preferenceNotes, available, suitable, driverLicense);
-  }
-
   private DriverLicense createDriverLicenseFromFields()
   {
     String licenseNo = getText(licenseNoField, "License number");
     String licenseType = getComboValue(licenseTypeBox, "License type");
     return new DriverLicense(licenseNo, licenseType);
-  }
-
-  private WorkSchedule createOptionalScheduleFromFields()
-  {
-    boolean hasAnyScheduleInput = hasComboValue(dayBox) || hasComboValue(scheduleStatusBox) || hasDateValue(scheduleStartDatePicker) || hasDateValue(scheduleEndDatePicker) || hasText(scheduleStartTimeField) || hasText(scheduleEndTimeField);
-
-    if (!hasAnyScheduleInput)
-    {
-      return null;
-    }
-
-    return createRequiredScheduleFromFields();
   }
 
   private WorkSchedule createRequiredScheduleFromFields()
@@ -580,16 +514,6 @@ public class ChauffeurViewController
   private boolean hasText(TextField field)
   {
     return field != null && field.getText() != null && !field.getText().trim().isEmpty();
-  }
-
-  private boolean hasComboValue(ComboBox<String> comboBox)
-  {
-    return comboBox != null && comboBox.getValue() != null && !comboBox.getValue().trim().isEmpty();
-  }
-
-  private boolean hasDateValue(DatePicker datePicker)
-  {
-    return datePicker != null && datePicker.getValue() != null;
   }
 
   private Chauffeur getSelectedChauffeur()

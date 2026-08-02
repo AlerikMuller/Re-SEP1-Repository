@@ -8,9 +8,11 @@ import javafx.stage.Stage;
 import model.TripPlanningModelManager;
 import view.BusViewController.AddBusViewController;
 import view.BusViewController.BusViewController;
+import view.ChauffeurViewController.AddChauffeurViewController;
 import view.ChauffeurViewController.ChauffeurViewController;
 import view.CustomerViewController.CustomerViewController;
 import view.MainViewController.MainViewController;
+import view.TripViewController.AddTripViewController;
 import view.TripViewController.TripViewController;
 
 import java.io.IOException;
@@ -21,7 +23,9 @@ public class ViewHandler
 
   private MainViewController mainViewController;
   private TripViewController tripViewController;
+  private AddTripViewController addTripViewController;
   private ChauffeurViewController chauffeurViewController;
+  private AddChauffeurViewController addChauffeurViewController;
   private CustomerViewController customerViewController;
   private BusViewController busViewController;
   private AddBusViewController addBusViewController;
@@ -33,83 +37,104 @@ public class ViewHandler
     this.stage = stage;
     this.modelManager = modelManager;
   }
+
   public void start()
   {
-    //kelsang
-   loadViewBus();
-   loadViewAddBus();
-   //Giyath
+    loadViewBus();
+    loadViewAddBus();
     loadMainView();
     loadCustomerView();
-    //Alerik
     loadTripView();
+    loadAddTripView();
     loadChauffeurView();
+    loadAddChauffeurView();
     openView("MainView");
   }
 
-  public  void openView(String id)
+  public void openView(String id)
   {
     switch (id)
     {
       case "MainView":
-        if(mainViewController == null)
+        if (mainViewController == null)
         {
-         showMessage("Please enter a valid Bus information");
+          showMessage("Main view could not be loaded.");
         }
         stage.setScene(mainViewController.getScene());
         mainViewController.reset();
         break;
 
-      case "TripView":
-        if(tripViewController == null)
+      case "AddTripView":
+        if (addTripViewController == null)
         {
-          showMessage("Please enter a valid Trip Information");
+          showMessage("Add trip view could not be loaded.");
+        }
+        stage.setScene(addTripViewController.getScene());
+        addTripViewController.reset();
+        break;
+
+      case "TripView":
+        if (tripViewController == null)
+        {
+          showMessage("Trip view could not be loaded.");
         }
         stage.setScene(tripViewController.getScene());
         tripViewController.reset();
         break;
 
-        case "CustomerView":
-          if(customerViewController == null)
-          {
-            showMessage("Please enter a valid Bus information");
-          }
-          stage.setScene(customerViewController.getScene());
-          customerViewController.reset();
+      case "CustomerView":
+        if (customerViewController == null)
+        {
+          showMessage("Customer view could not be loaded.");
+        }
+        stage.setScene(customerViewController.getScene());
+        customerViewController.reset();
         break;
 
       case "AddBusView":
-        if(addBusViewController == null)
+        if (addBusViewController == null)
         {
-          showMessage("Please enter a valid Bus information");
+          showMessage("Add bus view could not be loaded.");
         }
         stage.setScene(addBusViewController.getScene());
         addBusViewController.reset();
         break;
 
       case "BusMainView":
-        if(busViewController == null){
-          showMessage("Please enter a valid Bus information");
+        if (busViewController == null)
+        {
+          showMessage("Bus view could not be loaded.");
         }
         stage.setScene(busViewController.getScene());
         busViewController.reset();
         break;
 
-        case "ChauffeurView":
-          if(chauffeurViewController == null)
-          {
-            showMessage("Please enter a valid Chauffeur information");
-          }
-          stage.setScene(chauffeurViewController.getScene());
-          chauffeurViewController.reset();
-          break;
-        //cases....
+      case "AddChauffeurView":
+        if (addChauffeurViewController == null)
+        {
+          showMessage("Add chauffeur view could not be loaded.");
+        }
+        stage.setScene(addChauffeurViewController.getScene());
+        addChauffeurViewController.reset();
+        break;
+
+      case "ChauffeurView":
+        if (chauffeurViewController == null)
+        {
+          showMessage("Chauffeur view could not be loaded.");
+        }
+        stage.setScene(chauffeurViewController.getScene());
+        chauffeurViewController.reset();
+        break;
     }
+
     String title = "";
-    if(stage.getScene().getRoot().getUserData()!=null)
+
+    if (stage.getScene().getRoot().getUserData() != null)
     {
       title = stage.getScene().getRoot().getUserData().toString();
     }
+
     stage.setTitle(title);
     stage.show();
   }
@@ -131,22 +156,41 @@ public class ViewHandler
       throw new RuntimeException(e.getMessage());
     }
   }
+
   private void loadTripView()
   {
-   try
-   {
-     FXMLLoader loader = new FXMLLoader();
-     loader.setLocation(getClass().getResource("/view/TripViewController/TripView.fxml"));
-     Region root = loader.load();
-     tripViewController = loader.getController();
-     Scene scene = new Scene(root);
-     tripViewController.init(this, scene, modelManager);
-     stage.setScene(scene);
-   }catch (IOException e)
-   {
-     throw new RuntimeException(e.getMessage());
-   }
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/view/TripViewController/TripView.fxml"));
+      Region root = loader.load();
+      tripViewController = loader.getController();
+      Scene scene = new Scene(root);
+      tripViewController.init(this, scene, modelManager);
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e.getMessage());
+    }
   }
+
+  private void loadAddTripView()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/view/TripViewController/AddTripView.fxml"));
+      Region root = loader.load();
+      addTripViewController = loader.getController();
+      Scene scene = new Scene(root);
+      addTripViewController.init(this, scene, modelManager);
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
   private void loadChauffeurView()
   {
     try
@@ -163,6 +207,24 @@ public class ViewHandler
       throw new RuntimeException(e.getMessage());
     }
   }
+
+  private void loadAddChauffeurView()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/view/ChauffeurViewController/AddChauffeurView.fxml"));
+      Region root = loader.load();
+      addChauffeurViewController = loader.getController();
+      Scene scene = new Scene(root);
+      addChauffeurViewController.init(this, scene, modelManager);
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
   private void loadViewBus()
   {
     try
@@ -171,13 +233,14 @@ public class ViewHandler
       loader.setLocation(getClass().getResource("/view/BusViewController/BusViewController.fxml"));
       Region root = loader.load();
       busViewController = loader.getController();
-      busViewController.init(this,new Scene(root),modelManager);
+      busViewController.init(this, new Scene(root), modelManager);
     }
     catch (IOException e)
     {
       throw new RuntimeException(e.getMessage());
     }
   }
+
   private void loadViewAddBus()
   {
     try
@@ -196,19 +259,18 @@ public class ViewHandler
 
   private void loadCustomerView()
   {
-   try
-   {
+    try
+    {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource("/view/CustomerViewController/CustomerView.fxml"));
       Region root = loader.load();
       customerViewController = loader.getController();
       Scene scene = new Scene(root);
       customerViewController.init(this, scene, modelManager);
-      stage.setScene(scene);
     }
     catch (IOException e)
     {
-      e.printStackTrace();
+      throw new RuntimeException(e.getMessage());
     }
   }
 
