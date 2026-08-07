@@ -1,9 +1,11 @@
 package model;
 
+//Stores the basic customer information used throughout trip planning.
 public class Customer {
     private String name;
     private String phone;
 
+    //Creates a customer after validating required name and phone.
     public Customer(String name, String phone) {
         setName(name);
         setPhone(phone);
@@ -20,6 +22,7 @@ public class Customer {
         return name;
     }
 
+    //Ensures customer phone numbers contain digits and are not empty.
     public void setPhone(String phone) {
         if (phone == null || phone.trim().isEmpty()) {
             throw new IllegalArgumentException("Phone number cannot be empty.");

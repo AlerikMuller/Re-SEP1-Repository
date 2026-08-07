@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
+//Controls chauffeur viewing, editing, removal, schedules, and table interaction.
 public class ChauffeurViewController
 {
   @FXML private TextField nameField;
@@ -59,6 +60,7 @@ public class ChauffeurViewController
   private Scene scene;
   private final ObservableList<Chauffeur> chauffeurRows = FXCollections.observableArrayList();
 
+  //Connects controller dependencies and prepares table controls for use.
   public void init(ViewHandler viewHandler, Scene scene, TripPlanningModelManager modelManager)
   {
     this.modelManager = modelManager;
@@ -113,6 +115,7 @@ public class ChauffeurViewController
     }
   }
 
+  //Maps chauffeur properties to their corresponding table display columns.
   private void setupTableColumns()
   {
     if (nameColumn != null)
@@ -161,6 +164,7 @@ public class ChauffeurViewController
     }
   }
 
+  //Loads selected chauffeur details whenever the table selection changes.
   private void setupChauffeurSelection()
   {
     if (chauffeurTableView == null)
@@ -178,6 +182,7 @@ public class ChauffeurViewController
             });
   }
 
+  //Reloads all chauffeur records into the management table display.
   private void refreshChauffeurs()
   {
     if (chauffeurTableView == null || modelManager == null)
@@ -206,6 +211,7 @@ public class ChauffeurViewController
     chauffeurTableView.refresh();
   }
 
+  //Validates fields and saves changes to the selected chauffeur.
   @FXML
   private void editChauffeur()
   {
@@ -241,6 +247,7 @@ public class ChauffeurViewController
     }
   }
 
+  //Confirms and attempts removal of the currently selected chauffeur.
   @FXML
   private void removeChauffeur()
   {
@@ -271,6 +278,7 @@ public class ChauffeurViewController
     }
   }
 
+  //Creates and appends a validated schedule to selected chauffeur.
   @FXML
   private void addWorkSchedule()
   {
@@ -397,6 +405,7 @@ public class ChauffeurViewController
     return new DriverLicense(licenseNo, licenseType);
   }
 
+  //Builds a schedule from required date, day, and status values.
   private WorkSchedule createRequiredScheduleFromFields()
   {
     String day = getComboValue(dayBox, "Day");
@@ -431,6 +440,7 @@ public class ChauffeurViewController
     return new DateInterval(startDate, endDate);
   }
 
+  //Validates optional times and prevents invalid same-day schedule order.
   private TimeInterval createScheduleTimeInterval(DateInterval dateInterval)
   {
     Time startTime = parseTime(getText(scheduleStartTimeField, "Schedule start time"));
@@ -526,6 +536,7 @@ public class ChauffeurViewController
     return chauffeurTableView.getSelectionModel().getSelectedItem();
   }
 
+  //Copies selected chauffeur information into editable interface controls.
   private void fillFieldsFromChauffeur(Chauffeur chauffeur)
   {
     if (chauffeur == null)
@@ -581,6 +592,7 @@ public class ChauffeurViewController
     fillScheduleFieldsFromFirstSchedule(chauffeur);
   }
 
+  //Displays the first stored schedule for the selected chauffeur.
   private void fillScheduleFieldsFromFirstSchedule(Chauffeur chauffeur)
   {
     ArrayList<WorkSchedule> schedules = chauffeur.getAllWorkSchedules();

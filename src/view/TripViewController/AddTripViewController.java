@@ -26,6 +26,7 @@ import view.ViewHandler;
 
 import java.time.LocalDate;
 
+//Controls trip registration, resource selection, validation, and navigation actions.
 public class AddTripViewController
 {
     @FXML private TextField originField;
@@ -50,6 +51,7 @@ public class AddTripViewController
     private ViewHandler viewHandler;
     private Scene scene;
 
+    //Connects dependencies and loads selectable trip resources into controls.
     public void init(ViewHandler viewHandler, Scene scene, TripPlanningModelManager modelManager)
     {
         this.viewHandler = viewHandler;
@@ -70,6 +72,7 @@ public class AddTripViewController
         clearFields();
     }
 
+    //Routes button actions to registration, clearing, deselection, or navigation.
     @FXML
     public void handleActions(ActionEvent e)
     {
@@ -108,6 +111,7 @@ public class AddTripViewController
         }
     }
 
+    //Refreshes every selectable resource list used during trip registration.
     private void refreshAll()
     {
         refreshCustomers();
@@ -151,6 +155,7 @@ public class AddTripViewController
         busBox.setItems(buses);
     }
 
+    //Loads suitable available chauffeurs, falling back to available chauffeurs.
     private void refreshChauffeurs()
     {
         if (chauffeurBox == null || modelManager == null)
@@ -180,6 +185,7 @@ public class AddTripViewController
         chauffeurBox.setItems(chauffeurs);
     }
 
+    //Validates, checks conflicts, registers, saves, and confirms the trip.
     private void registerTrip()
     {
         try
@@ -204,6 +210,7 @@ public class AddTripViewController
         }
     }
 
+    //Builds a complete trip from validated registration form values.
     private Trip createTripFromFields()
     {
         Bus bus = busBox == null ? null : busBox.getValue();
@@ -234,6 +241,7 @@ public class AddTripViewController
         return new Trip(origin, destination, status, bus, chauffeur, dateInterval, timeInterval, customer);
     }
 
+    //Converts selected calendar dates into a validated model interval.
     private DateInterval createDateInterval()
     {
         if (startDatePicker == null || startDatePicker.getValue() == null)
@@ -252,6 +260,7 @@ public class AddTripViewController
         return new DateInterval(startDate, endDate);
     }
 
+    //Validates trip times and enforces chronological same-day ordering.
     private TimeInterval createTimeInterval(DateInterval dateInterval)
     {
         Time startTime = parseTime(getText(startTimeField, "Start time"));
@@ -265,6 +274,7 @@ public class AddTripViewController
         return new TimeInterval(startTime, endTime);
     }
 
+    //Parses accepted twenty-four-hour text into a validated model time.
     private Time parseTime(String text)
     {
         String trimmed = text.trim();
@@ -297,6 +307,7 @@ public class AddTripViewController
         return field.getText().trim();
     }
 
+    //Prevents buses or chauffeurs from being double-booked on overlapping trips.
     private boolean hasOverlappingAssignment(Trip tripToCheck, Trip tripToIgnore)
     {
         TripList allTrips = modelManager.getAllTrips();

@@ -1,5 +1,6 @@
 package model;
 
+//Represents validated twenty-four-hour time values with second precision.
 public class Time implements Comparable<Time> {
     private int hour;
     private int minute;
@@ -33,6 +34,7 @@ public class Time implements Comparable<Time> {
         return second;
     }
 
+    //Validates hour, minute, and second before storing time values.
     public void setTime(int hour, int minute, int second) {
         validateTime(hour, minute, second);
         this.hour = hour;
@@ -52,6 +54,7 @@ public class Time implements Comparable<Time> {
         }
     }
 
+    //Converts the time into seconds for simpler chronological comparisons.
     private int toSeconds() {
         return hour * 3600 + minute * 60 + second;
     }
@@ -90,6 +93,7 @@ public class Time implements Comparable<Time> {
         return toSeconds();
     }
 
+    //Compares two times using their total number of seconds.
     @Override
     public int compareTo(Time other) {
         if (other == null) {

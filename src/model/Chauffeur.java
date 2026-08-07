@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+//Stores chauffeur details, availability, suitability, licenses, and work schedules.
 public class Chauffeur
 {
     private String name;
@@ -13,6 +14,7 @@ public class Chauffeur
     private ArrayList<WorkSchedule> workSchedules;
     private DriverLicense driverLicense;
 
+    //Creates a chauffeur and validates all required personal information.
     public Chauffeur(String name, String phone, int experienceYears, String preferenceNotes, boolean isAvailable, boolean isSuitable, DriverLicense driverLicense)
     {
         this.workSchedules = new ArrayList<>();
@@ -69,6 +71,7 @@ public class Chauffeur
         return experienceYears;
     }
 
+    //Restricts preferences to the three supported planning preference values.
     public void setPreferenceNotes(String preferenceNotes)
     {
         if (preferenceNotes == null || preferenceNotes.trim().isEmpty())
@@ -101,6 +104,7 @@ public class Chauffeur
         return isAvailable;
     }
 
+    //Stores suitability after confirming required planning information exists.
     public void setSuitable(boolean suitable, String preferenceNotes, DriverLicense driverLicense)
     {
         if (preferenceNotes == null || preferenceNotes.trim().isEmpty())
@@ -142,6 +146,7 @@ public class Chauffeur
         this.driverLicense = driverLicense;
     }
 
+    //Adds a validated work schedule to this chauffeur collection.
     public void addSchedule(WorkSchedule schedule)
     {
         if (schedule == null)
@@ -167,6 +172,7 @@ public class Chauffeur
         setDriverLicense(driverLicense);
     }
 
+    //Checks general availability and matching schedules for requested intervals.
     public boolean isAvailableFor(DateInterval dateInterval, TimeInterval timeInterval)
     {
         if (!isAvailable)

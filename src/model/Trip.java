@@ -1,5 +1,6 @@
 package model;
 
+//Stores trip details, assigned resources, intervals, status, and customer.
 public class Trip
 {
     private String origin;
@@ -71,6 +72,7 @@ public class Trip
         return destination;
     }
 
+    //Restricts trip status to the four supported workflow states.
     public void setStatus(String status)
     {
         if (status == null || status.trim().isEmpty())
@@ -106,6 +108,7 @@ public class Trip
         return status;
     }
 
+    //Assigns a required bus after preventing null resource references.
     public void assignBus(Bus bus)
     {
         if (bus == null)
@@ -126,6 +129,7 @@ public class Trip
         return assignedBus;
     }
 
+    //Assigns a required chauffeur after preventing null resource references.
     public void assignChauffeur(Chauffeur chauffeur)
     {
         if (chauffeur == null)
@@ -201,11 +205,13 @@ public class Trip
         this.customer = null;
     }
 
+    //Allows editing unless the trip currently has Started status.
     public boolean canBeEdited()
     {
         return status.equals("Not Started") || status.equals("Cancelled") || status.equals("Ended");
     }
 
+    //Allows removal unless the trip currently has Started status.
     public boolean canBeRemoved()
     {
         return status.equals("Not Started") || status.equals("Cancelled") || status.equals("Ended");
@@ -216,6 +222,7 @@ public class Trip
         return status.equals("Started") || status.equals("Ended");
     }
 
+    //Checks whether another trip overlaps both date and time.
     public boolean overlaps(Trip other)
     {
         if (other == null)

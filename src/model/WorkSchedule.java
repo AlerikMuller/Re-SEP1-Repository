@@ -1,5 +1,6 @@
 package model;
 
+//Stores chauffeur schedule day, status, date interval, and time.
 public class WorkSchedule {
     private String day;
     private String status;
@@ -31,6 +32,7 @@ public class WorkSchedule {
         return day;
     }
 
+    //Accepts only Active or OFF as valid schedule states.
     public void setStatus(String status)
     {
         if (status == null || status.trim().isEmpty())
@@ -70,6 +72,7 @@ public class WorkSchedule {
         return timeInterval;
     }
 
+    //Checks active status and overlapping requested date and time intervals.
     public boolean isAvailableFor(DateInterval requestedDateInterval, TimeInterval requestedTimeInterval) {
         if (requestedDateInterval == null) {
             throw new IllegalArgumentException("Requested date interval cannot be empty.");

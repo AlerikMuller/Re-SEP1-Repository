@@ -1,5 +1,6 @@
 package model;
 
+//Represents an inclusive start and end date for activities.
 public class DateInterval {
     private Date startDate;
     private Date endDate;
@@ -24,6 +25,7 @@ public class DateInterval {
         return endDate;
     }
 
+    //Ensures both dates exist and start never follows end.
     public void setDateInterval(Date startDate, Date endDate) {
         if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("Start date and end date cannot be empty.");
@@ -47,6 +49,7 @@ public class DateInterval {
         return startDate.isAfter(currentDate);
     }
 
+    //Detects whether two date ranges share at least one date.
     public boolean overlaps(DateInterval other) {
         if (other == null) {
             throw new IllegalArgumentException("Other date interval cannot be empty.");

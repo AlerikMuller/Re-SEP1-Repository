@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
+//Ensures customer phone numbers contain digits and are not empty.
 public class Date implements Comparable<Date> {
     private int day;
     private int month;
@@ -35,6 +36,7 @@ public class Date implements Comparable<Date> {
         return year;
     }
 
+    //Validates the complete date before replacing the stored values.
     public void setDate(int day, int month, int year) {
         validateDate(day, month, year);
         this.day = day;
@@ -42,6 +44,7 @@ public class Date implements Comparable<Date> {
         this.year = year;
     }
 
+    //Uses LocalDate to reject impossible day, month, and year combinations.
     private void validateDate(int day, int month, int year) {
         try {
             LocalDate.of(year, month, day);
@@ -88,6 +91,7 @@ public class Date implements Comparable<Date> {
         return toLocalDate().hashCode();
     }
 
+    //Compares two dates chronologically using their LocalDate representations.
     @Override
     public int compareTo(Date other) {
         if (other == null) {

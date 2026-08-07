@@ -19,6 +19,7 @@ import view.ViewHandler;
 
 import java.time.LocalDate;
 
+//Controls chauffeur registration, validation, optional schedules, and navigation actions.
 public class AddChauffeurViewController
 {
     @FXML private TextField nameField;
@@ -41,6 +42,7 @@ public class AddChauffeurViewController
     private ViewHandler viewHandler;
     private Scene scene;
 
+    //Connects view dependencies and prepares selectable values before interaction.
     public void init(ViewHandler viewHandler, Scene scene, TripPlanningModelManager modelManager)
     {
         this.viewHandler = viewHandler;
@@ -59,6 +61,7 @@ public class AddChauffeurViewController
         clearFields();
     }
 
+    //Populates supported preferences, license types, days, and schedule statuses.
     private void setupComboBoxes()
     {
         if (preferenceBox != null)
@@ -92,6 +95,7 @@ public class AddChauffeurViewController
         }
     }
 
+    //Builds, saves, and confirms a new chauffeur from entered data.
     @FXML
     private void addChauffeur()
     {
@@ -201,6 +205,7 @@ public class AddChauffeurViewController
         viewHandler.openView("MainView");
     }
 
+    //Converts validated interface values into a complete chauffeur object.
     private Chauffeur createChauffeurFromFields()
     {
         String name = getText(nameField, "Name");
@@ -222,6 +227,7 @@ public class AddChauffeurViewController
         return new DriverLicense(licenseNo, licenseType);
     }
 
+    //Creates a work schedule only when schedule information was entered.
     private WorkSchedule createOptionalScheduleFromFields()
     {
         boolean hasAnyScheduleInput = hasComboValue(dayBox) || hasComboValue(scheduleStatusBox) || hasDateValue(scheduleStartDatePicker) || hasDateValue(scheduleEndDatePicker) || hasText(scheduleStartTimeField) || hasText(scheduleEndTimeField);
@@ -234,6 +240,7 @@ public class AddChauffeurViewController
         return createRequiredScheduleFromFields();
     }
 
+    //Builds a complete schedule after validating all mandatory schedule fields.
     private WorkSchedule createRequiredScheduleFromFields()
     {
         String day = getComboValue(dayBox, "Day");
@@ -269,6 +276,7 @@ public class AddChauffeurViewController
         return new DateInterval(startDate, endDate);
     }
 
+    //Validates optional schedule times and same-day chronological ordering.
     private TimeInterval createScheduleTimeInterval(DateInterval dateInterval)
     {
         Time startTime = parseTime(getText(scheduleStartTimeField, "Schedule start time"));
@@ -282,6 +290,7 @@ public class AddChauffeurViewController
         return new TimeInterval(startTime, endTime);
     }
 
+    //Converts experience input to a required non-negative whole number.
     private int parseExperienceYears()
     {
         String experienceText = getText(experienceField, "Experience years");
@@ -303,6 +312,7 @@ public class AddChauffeurViewController
         }
     }
 
+    //Parses accepted twenty-four-hour time formats into model time objects.
     private Time parseTime(String text)
     {
         String trimmed = text.trim();
