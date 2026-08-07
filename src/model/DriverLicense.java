@@ -1,5 +1,6 @@
 package model;
 
+//Stores chauffeur license number and supported bus license permissions.
 public class DriverLicense {
     private String licenseNo;
     private String licenseType;
@@ -19,6 +20,7 @@ public class DriverLicense {
         return licenseNo;
     }
 
+    //Validates one or more supported license types before storage.
     public void setLicenseType(String type) {
         if (type == null || type.trim().isEmpty()) {
             throw new IllegalArgumentException("License type cannot be empty.");
@@ -39,6 +41,7 @@ public class DriverLicense {
         return licenseType;
     }
 
+    //Updates license number and type through validated setter methods.
     public void setDriverLicense(String number, String type) {
         setLicenseNo(number);
         setLicenseType(type);

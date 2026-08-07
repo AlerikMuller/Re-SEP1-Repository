@@ -31,6 +31,7 @@ import view.ViewHandler;
 import java.time.LocalDate;
 import java.util.Optional;
 
+//Controls trip overview, editing, removal, filtering, and resource reassignment.
 public class TripViewController
 {
   @FXML private TextField originField;
@@ -70,6 +71,7 @@ public class TripViewController
   private ViewHandler viewHandler;
   private final ObservableList<Trip> tripRows = FXCollections.observableArrayList();
 
+  //Connects controller dependencies and prepares the management interface.
   public void init(ViewHandler viewHandler, Scene scene, TripPlanningModelManager modelManager)
   {
     this.modelManager = modelManager;
@@ -92,6 +94,7 @@ public class TripViewController
     refreshAll();
   }
 
+  //Routes interface actions to editing, removal, filtering, and navigation.
   @FXML
   public void handleActions(ActionEvent e)
   {
@@ -142,6 +145,7 @@ public class TripViewController
     }
   }
 
+  //Maps trip properties and assignments into their displayed table columns.
   private void setupTableColumns()
   {
     if (originColumn != null)
@@ -203,6 +207,7 @@ public class TripViewController
     }
   }
 
+  //Loads selected trip details whenever the table selection changes.
   private void setupTripSelection()
   {
     if (tripTableView == null)
@@ -228,6 +233,7 @@ public class TripViewController
     refreshChauffeurs();
   }
 
+  //Reloads either all trips or only ended trip records.
   private void refreshTrips()
   {
     if (tripTableView == null || modelManager == null)
@@ -307,6 +313,7 @@ public class TripViewController
     busBox.setValue(selectedBus);
   }
 
+  //Loads suitable available chauffeurs while preserving current assignments.
   private void refreshChauffeurs()
   {
     if (chauffeurBox == null || modelManager == null)
@@ -343,6 +350,7 @@ public class TripViewController
     chauffeurBox.setValue(selectedChauffeur);
   }
 
+  //Validates proposed changes, prevents conflicts, then saves the trip.
   @FXML
   private void editTrip()
   {
@@ -394,6 +402,7 @@ public class TripViewController
     }
   }
 
+  //Checks status, confirms deletion, removes, and persists selected trip.
   @FXML
   private void removeTrip()
   {
@@ -504,6 +513,7 @@ public class TripViewController
     }
   }
 
+  //Builds proposed trip data from the current editable form values.
   private Trip createTripFromFieldsForEdit()
   {
     Bus bus = busBox == null ? null : busBox.getValue();
@@ -552,6 +562,7 @@ public class TripViewController
     return new DateInterval(startDate, endDate);
   }
 
+  //Validates entered times and same-day start-before-end requirements.
   private TimeInterval createTimeInterval(DateInterval dateInterval)
   {
     Time startTime = parseTime(getText(startTimeField, "Start time"));
@@ -612,6 +623,7 @@ public class TripViewController
     return tripTableView.getSelectionModel().getSelectedItem();
   }
 
+  //Copies selected trip information and assignments into editing controls.
   private void fillFieldsFromTrip(Trip trip)
   {
     if (trip == null)
@@ -701,6 +713,7 @@ public class TripViewController
     }
   }
 
+  //Detects conflicting bus or chauffeur assignments while ignoring edited trip.
   private boolean hasOverlappingAssignment(Trip tripToCheck, Trip tripToIgnore)
   {
     TripList allTrips = modelManager.getAllTrips();

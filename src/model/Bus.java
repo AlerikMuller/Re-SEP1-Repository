@@ -1,5 +1,6 @@
 package model;
 
+//Stores bus details used for registration, planning, and assignment.
 public class Bus {
     private String regNo;
     private String type;
@@ -7,6 +8,7 @@ public class Bus {
     private int seatCapacity;
     private boolean isAvailable;
 
+    //Creates a bus and validates all supplied registration information.
     public Bus(String regNo, String type, float rentPricePerDay, int seatCapacity, boolean availability) {
         setBus(regNo, type, rentPricePerDay, seatCapacity, availability);
     }
@@ -22,6 +24,7 @@ public class Bus {
         return regNo;
     }
 
+    //Accepts only supported bus types before storing the value.
     public void setType(String type)
     {
         if (type == null || type.trim().isEmpty())
@@ -50,6 +53,7 @@ public class Bus {
         return rentPricePerDay;
     }
 
+    //Updates every bus property through the validated setter methods.
     public void setBus(String regNo, String type, float rentPricePerDay, int seatCapacity, boolean availability) {
         setRegNo(regNo);
         setType(type);
@@ -66,6 +70,7 @@ public class Bus {
         return isAvailable;
     }
 
+    //Prevents negative seat capacities from entering the stored bus data.
     public void setSeatCapacity(int seatCapacity) {
         if (seatCapacity < 0) {
             throw new IllegalArgumentException("Seat capacity cannot be negative.");

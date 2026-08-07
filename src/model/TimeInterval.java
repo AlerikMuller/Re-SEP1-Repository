@@ -1,5 +1,6 @@
 package model;
 
+//Represents daily time ranges and supports overlap detection across midnight.
 public class TimeInterval
 {
     private Time startTime;
@@ -40,6 +41,7 @@ public class TimeInterval
         return endTime;
     }
 
+    //Requires both time boundaries before storing the complete interval.
     public void setTimeInterval(Time startTime, Time endTime)
     {
         if (startTime == null || endTime == null)
@@ -56,6 +58,7 @@ public class TimeInterval
         return startTime != null && endTime != null;
     }
 
+    //Compares split time segments to detect shared occupied periods.
     public boolean overlaps(TimeInterval other)
     {
         if (other == null)
@@ -80,6 +83,7 @@ public class TimeInterval
         return false;
     }
 
+    //Splits overnight intervals into comparable segments around midnight.
     private int[][] toRanges(TimeInterval interval)
     {
         int start = toSeconds(interval.startTime);
