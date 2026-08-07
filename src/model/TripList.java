@@ -2,14 +2,36 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * A container class that stores and manages a collection of {@link Trip} objects.
+ * <p>
+ * The {@code TripList} wraps an {@link ArrayList} of trips and provides operations for
+ * adding, removing, searching and filtering trips, as well as for assigning buses and
+ * chauffeurs and for detecting overlapping assignments. It supports the double-booking
+ * checks that prevent the same bus or chauffeur from being assigned to two overlapping
+ * trips.
+ *
+ * @author Ghiyath
+ * @version 1.0
+ */
 public class TripList {
 
     private ArrayList<Trip> trips;
 
+    /**
+     * Creates an empty {@code TripList}.
+     */
     public TripList() {
         this.trips = new ArrayList<>();
     }
 
+    /**
+     * Adds a trip to the list, provided that it has not already started and does not
+     * overlap with an existing trip.
+     *
+     * @param trip the trip to add
+     * @throws IllegalArgumentException if the trip has already started or overlaps an existing trip
+     */
     public void addTrip(Trip trip) {
         for(int i=0; i<trips.size(); i++)
         {
@@ -18,9 +40,15 @@ public class TripList {
                 throw new IllegalArgumentException("Trip already exists.");
             }
         }
-                trips.add(trip);
-        }
+        trips.add(trip);
+    }
 
+    /**
+     * Removes the given trip from the list, provided that its status allows removal.
+     *
+     * @param trip the trip to remove
+     * @throws IllegalArgumentException if the trip is {@code null} or the list is empty
+     */
     public void removeTrip(Trip trip) {
         if(trip == null || trips.isEmpty()) {
             throw new IllegalArgumentException("Trip cannot be null.");
@@ -30,10 +58,22 @@ public class TripList {
         }
     }
 
+    /**
+     * Returns the trip at the given position in the list.
+     *
+     * @param index the position of the trip in the list
+     * @return the trip at the specified index
+     */
     public Trip getTrip(int index) {
         return trips.get(index);
     }
 
+    /**
+     * Returns a new list containing only the trips that have the given status.
+     *
+     * @param status the status to filter by (for example "Ended")
+     * @return a {@code TripList} of trips with the given status
+     */
     public TripList getTripsByStatus(String status) {
         TripList result = new TripList();
         for (Trip trip : trips) {
@@ -44,57 +84,23 @@ public class TripList {
         return result;
     }
 
-    public void changeUsualTripStatus(Trip tripToUpdate)
-    {
-        for(Trip trip : trips)
-        {
-            if (trip.getOrigin().equals(tripToUpdate.getOrigin())
-                || trip.getDestination().equals(tripToUpdate.getDestination())
-                || trip.getAssignedBus() == tripToUpdate.getAssignedBus()
-                || trip.getAssignedChauffeur()
-                == tripToUpdate.getAssignedChauffeur()
-                || trip.getDateInterval() == tripToUpdate.getDateInterval()
-                || trip.getTimeInterval() == tripToUpdate.getTimeInterval())
-            {
-                trip.setStatus(tripToUpdate.getStatus());
-            }
-        }
-    }
-    public void changeCustomerTripStatus(Trip tripToUpdate)
-    {
-        for(Trip trip : trips) {
-            if (trip.getOrigin().equals(tripToUpdate.getOrigin()) || trip.getDestination().equals(tripToUpdate.getDestination()) || trip.getAssignedBus() == tripToUpdate.getAssignedBus() || trip.getAssignedChauffeur() == tripToUpdate.getAssignedChauffeur() || trip.getDateInterval() == tripToUpdate.getDateInterval() || trip.getTimeInterval() == tripToUpdate.getTimeInterval() || trip.getCustomer() == tripToUpdate.getCustomer()) {
-                trip.setStatus(tripToUpdate.getStatus());
-            }
-        }
-    }
-
-    public TripList getPastTrips() {
-        return getTripsByStatus("Ended");
-    }
-
-    public TripList getActiveTrips() {
-        TripList result = new TripList();
-        for (Trip trip : trips) {
-            String status = trip.getStatus();
-            if (status.equalsIgnoreCase("Not Started") || status.equalsIgnoreCase("Started")) {
-                result.addTrip(trip);
-            }
-        }
-        return result;
-    }
-
+    /**
+     * Assigns the bus of the given trip to matching trips in the list that do not yet
+     * have a chauffeur assigned and are not started.
+     *
+     * @param tripToAssign the trip whose bus and matching details are used for the assignment
+     */
     public void assignBusToTrip(Trip tripToAssign)
     {
         for (Trip trip : trips)
         {
             if (trip.getOrigin().equals(tripToAssign.getOrigin())
-                || trip.getDestination().equals(tripToAssign.getDestination())
-                || trip.getDateInterval() == tripToAssign.getDateInterval()
-                || trip.getTimeInterval() == tripToAssign.getTimeInterval())
+                    || trip.getDestination().equals(tripToAssign.getDestination())
+                    || trip.getDateInterval() == tripToAssign.getDateInterval()
+                    || trip.getTimeInterval() == tripToAssign.getTimeInterval())
             {
                 if (trip.getAssignedChauffeur() == null && trip.getStatus()
-                    .equalsIgnoreCase("Not Started"))
+                        .equalsIgnoreCase("Not Started"))
                 {
                     trip.assignBus(tripToAssign.getAssignedBus());
                 }
@@ -102,6 +108,12 @@ public class TripList {
         }
     }
 
+    /**
+     * Assigns the chauffeur of the given trip to matching trips in the list.
+     *
+     * @param tripToAssign the trip whose chauffeur and matching details are used for the assignment
+     * @throws IllegalArgumentException if a matching trip already has a chauffeur assigned and is not "Not Started"
+     */
     public void assignChauffeurToTrip(Trip tripToAssign)
     {
         for(Trip trip : trips)
@@ -110,15 +122,26 @@ public class TripList {
             {
                 if(trip.getAssignedChauffeur() != null && !trip.getStatus().equalsIgnoreCase("Not Started"))
                 {
-                   throw new IllegalArgumentException("Chauffeur already assigned.");
+                    throw new IllegalArgumentException("Chauffeur already assigned.");
                 }
                 trip.assignChauffeur(tripToAssign.getAssignedChauffeur());
             }
         }
     }
 
+    /**
+     * Checks whether the given bus or chauffeur is already assigned to another trip whose
+     * date and time interval overlaps the given intervals. This implements the
+     * double-booking prevention rule.
+     *
+     * @param bus          the bus to check, or {@code null} to ignore the bus
+     * @param chauffeur    the chauffeur to check, or {@code null} to ignore the chauffeur
+     * @param dateInterval the date interval to check for overlaps
+     * @param timeInterval the time interval to check for overlaps
+     * @return {@code true} if an overlapping assignment exists, otherwise {@code false}
+     */
     public boolean hasOverlappingAssignment(Bus bus, Chauffeur chauffeur,
-                                             DateInterval dateInterval, TimeInterval timeInterval) {
+                                            DateInterval dateInterval, TimeInterval timeInterval) {
         for (Trip trip : trips) {
             boolean sameBus = bus != null && bus.equals(trip.getAssignedBus());
             boolean sameChauffeur = chauffeur != null && chauffeur.equals(trip.getAssignedChauffeur());
@@ -133,7 +156,13 @@ public class TripList {
         return false;
     }
 
-    // Used to check for double-booking: all trips currently assigned to this bus.
+    /**
+     * Returns a new list of all trips that the given bus is currently assigned to.
+     * Used when checking for double-booking of a bus.
+     *
+     * @param bus the bus to find trips for
+     * @return a {@code TripList} of trips assigned to the given bus
+     */
     public TripList getTripsForBus(Bus bus) {
         TripList result = new TripList();
         for (Trip trip : trips) {
@@ -144,7 +173,13 @@ public class TripList {
         return result;
     }
 
-    // Used to check for double-booking: all trips currently assigned to this chauffeur.
+    /**
+     * Returns a new list of all trips that the given chauffeur is currently assigned to.
+     * Used when checking for double-booking of a chauffeur.
+     *
+     * @param chauffeur the chauffeur to find trips for
+     * @return a {@code TripList} of trips assigned to the given chauffeur
+     */
     public TripList getTripsForChauffeur(Chauffeur chauffeur) {
         TripList result = new TripList();
         for (Trip trip : trips) {
@@ -155,14 +190,30 @@ public class TripList {
         return result;
     }
 
+    /**
+     * Returns the number of trips in the list.
+     *
+     * @return the number of trips
+     */
     public int size() {
         return trips.size();
     }
 
+    /**
+     * Checks whether the list contains no trips.
+     *
+     * @return {@code true} if the list is empty, otherwise {@code false}
+     */
     public boolean isEmpty() {
         return trips.isEmpty();
     }
 
+    /**
+     * Returns a string representation of the list, containing the string
+     * representation of every trip it holds.
+     *
+     * @return a string describing all trips in the list
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("TripList{\n");

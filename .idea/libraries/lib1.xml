@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Downloads/OneDrive_1_7-30-2026/bellsoft-jdk21.0.4-64-full/jdk-21.0.4-full/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$USER_HOME$/Downloads/OneDrive_1_7-30-2026/bellsoft-jdk21.0.4-64-full/jdk-21.0.4-full/lib" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Downloads/OneDrive_1_7-30-2026/bellsoft-jdk21.0.4-64-full/jdk-21.0.4-full/lib" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Downloads/OneDrive_1_7-30-2026/bellsoft-jdk21.0.4-64-full/jdk-21.0.4-full/lib" recursive="false" type="SOURCES" />
+  </library>
+</component>
