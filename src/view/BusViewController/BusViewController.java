@@ -16,6 +16,13 @@ import model.Bus;
 import model.TripPlanningModelManager;
 import view.ViewHandler;
 
+/**
+ * Controller for viewing and managing buses in a table.
+ * Provides functionality to view, update, and delete buses.
+ *
+ * @author Kelsang Sherpa
+ * @version 1.0
+ */
 public class BusViewController
 {
 
@@ -36,6 +43,14 @@ public class BusViewController
   @FXML private Button backButton;
 
 
+  /**
+   * Initializes the controller with scene, view handler, and model manager.
+   * Sets up the table and populates it with bus data.
+   *
+   * @param viewHandler the view handler for navigation
+   * @param scene the scene for this view
+   * @param modelManager the model manager for data access
+   */
   public void init(ViewHandler viewHandler, Scene scene,  TripPlanningModelManager modelManager)
   {
     this.modelManager = modelManager;
@@ -46,6 +61,10 @@ public class BusViewController
     reset();
   }
 
+  /**
+   * Configures table columns to display bus properties.
+   * Maps each column to the corresponding Bus object attribute.
+   */
   private void setUpTable()
   {
     //Connect columns with Bus attributes
@@ -57,6 +76,9 @@ public class BusViewController
    bussTableView.getItems().setAll(modelManager.getAllBuses().getAllBuses());
   }
 
+  /**
+   * Refreshes the table with current bus data from the model manager.
+   */
   public void reset()
   {
     if(modelManager!=null)
@@ -64,10 +86,20 @@ public class BusViewController
       bussTableView.getItems().setAll(modelManager.getAllBuses().getAllBuses());
     }
   }
+  /**
+   * Returns the scene of this view.
+   *
+   * @return the Scene for this controller
+   */
   public Scene getScene()
   {
     return scene;
   }
+  /**
+   * Handles button actions including refresh, delete, update, and back navigation.
+   *
+   * @param e the ActionEvent triggered by user interaction
+   */
   @FXML
   public void handleActions(ActionEvent e)
   {
@@ -89,6 +121,9 @@ public class BusViewController
     }
   }
 
+  /**
+   * Clears and reloads the bus table with fresh data.
+   */
   @FXML
   private void refresh()
   {
@@ -96,6 +131,10 @@ public class BusViewController
     reset();
   }
 
+  /**
+   * Opens an edit dialog for the selected bus.
+   * Updates the bus data if confirmed by the user.
+   */
   @FXML
   private void updateBus()
   {
@@ -217,8 +256,13 @@ public class BusViewController
   }
 
 
+  /**
+   * Removes the selected bus from the system.
+   * Displays a message if no bus is selected.
+   */
   @FXML
-  private void deleteBus(){
+  private void deleteBus()
+  {
     Bus selectedBus =  bussTableView.getSelectionModel().getSelectedItem();
     if(selectedBus != null){
       modelManager.removeBus(selectedBus);
@@ -228,6 +272,11 @@ public class BusViewController
     }
   }
 
+  /**
+   * Displays an information message dialog to the user.
+   *
+   * @param message the message to display
+   */
   private void showMessage(String message)
   {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);

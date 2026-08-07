@@ -9,6 +9,13 @@ import model.Bus;
 import model.TripPlanningModelManager;
 import view.ViewHandler;
 
+/**
+ * Controller for adding new buses to the system.
+ * Handles user input validation, bus creation, and persistence.
+ *
+ * @author Kelsang Sherpa
+ * @version 1.0
+ */
 public class AddBusViewController
 {
   private Scene scene;
@@ -21,7 +28,6 @@ public class AddBusViewController
   @FXML private ComboBox<String> busTypeBox;
 
   @FXML private TextField regNoTextField;
-  @FXML private TextField typeTextField;
   @FXML private TextField rentPricePerDayTextField;
   @FXML private TextField seatCapacityTextField;
   @FXML private RadioButton availableRadioButton;
@@ -30,12 +36,23 @@ public class AddBusViewController
   @FXML private MenuItem exitMenuItem;
   @FXML private MenuItem aboutMenuItem;
 
+  /**
+   * Initializes toggle group for availability radio buttons.
+   */
   @FXML public void initialize()
   {
     availabilityGroup = new ToggleGroup();
     availableRadioButton.setToggleGroup(availabilityGroup);
     unavailableRadioButton.setToggleGroup(availabilityGroup);
   }
+  /**
+   * Initializes the controller with scene, view handler, and model manager.
+   * Populates the bus type combo box.
+   *
+   * @param viewHandler the view handler for navigation
+   * @param scene the scene for this view
+   * @param modelManager the model manager for data access
+   */
   public void init(ViewHandler viewHandler, Scene scene,
       TripPlanningModelManager modelManager)
   {
@@ -44,6 +61,9 @@ public class AddBusViewController
     this.modelManager = modelManager;
     setupComboBox();
   }
+  /**
+   * Clears all input fields and resets selections to default state.
+   */
   public void reset()
   {
     regNoTextField.clear();
@@ -60,11 +80,22 @@ public class AddBusViewController
     }
   }
 
+  /**
+   * Returns the scene of this view.
+   *
+   * @return the Scene for this controller
+   */
   public Scene getScene()
   {
     return scene;
   }
 
+  /**
+   * Handles button and menu item actions.
+   * Routes to appropriate methods based on event source.
+   *
+   * @param e the ActionEvent triggered by user interaction
+   */
   @FXML
   public void handleActions(ActionEvent e)
   {
@@ -85,6 +116,10 @@ public class AddBusViewController
       showAbout();
     }
   }
+  /**
+   * Validates input and adds a new bus to the system.
+   * Checks for empty fields, duplicate registration numbers, and valid data types.
+   */
   private void addBus()
   {
     if (regNoTextField.getText().isBlank()
@@ -142,6 +177,13 @@ public class AddBusViewController
       showMessage(ex.getMessage());
     }
   }
+  /**
+   * Retrieves and validates the selected value from a combo box.
+   *
+   * @param comboBox the ComboBox to extract value from
+   * @return the trimmed value from the combo box
+   * @throws IllegalArgumentException if the value is null or empty
+   */
   private String getComboValue(ComboBox<String> comboBox)
   {
     if (comboBox == null || comboBox.getValue() == null || comboBox.getValue().trim().isEmpty())
@@ -151,6 +193,9 @@ public class AddBusViewController
 
     return comboBox.getValue().trim();
   }
+  /**
+   * Populates the bus type combo box with available options.
+   */
   private void setupComboBox()
   {
     if(busTypeBox!=null)
@@ -160,6 +205,9 @@ public class AddBusViewController
       ));
     }
   }
+  /**
+   * Displays a confirmation dialog and exits the program if confirmed.
+   */
   private void exitProgram()
   {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
@@ -175,6 +223,9 @@ public class AddBusViewController
       System.exit(0);
     }
   }
+  /**
+   * Displays an information dialog with details about the application.
+   */
   private void showAbout()
   {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -183,6 +234,11 @@ public class AddBusViewController
     alert.setContentText("This is a JavaFX bus management applications.");
     alert.showAndWait();
   }
+  /**
+   * Displays an information message dialog to the user.
+   *
+   * @param message the message to display
+   */
   private void showMessage(String message)
   {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);

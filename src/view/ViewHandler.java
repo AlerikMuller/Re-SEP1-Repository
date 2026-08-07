@@ -17,6 +17,13 @@ import view.TripViewController.TripViewController;
 
 import java.io.IOException;
 
+/**
+ * Manages view transitions and loads all application views.
+ * Acts as the central controller for switching between different scenes and initializing their controllers.
+ *
+ * @author Kelsang Sherpa
+ * @version 1.0
+ */
 public class ViewHandler
 {
   private final Stage stage;
@@ -32,12 +39,22 @@ public class ViewHandler
 
   private final TripPlanningModelManager modelManager;
 
+  /**
+   * Constructs a ViewHandler with the primary stage and model manager.
+   *
+   * @param stage the primary Stage for displaying scenes
+   * @param modelManager the TripPlanningModelManager for data access
+   */
   public ViewHandler(Stage stage, TripPlanningModelManager modelManager)
   {
     this.stage = stage;
     this.modelManager = modelManager;
   }
 
+  /**
+   * Initializes and loads all application views.
+   * Then displays the MainView as the starting point.
+   */
   public void start()
   {
     loadViewBus();
@@ -51,6 +68,12 @@ public class ViewHandler
     openView("MainView");
   }
 
+  /**
+   * Opens the view with the specified ID and displays it on the stage.
+   * Resets the view controller before displaying.
+   *
+   * @param id the identifier of the view to open (e.g., "MainView", "BusMainView", "AddBusView")
+   */
   public void openView(String id)
   {
     switch (id)
@@ -139,6 +162,11 @@ public class ViewHandler
     stage.show();
   }
 
+  /**
+   * Loads the main view from FXML and initializes its controller.
+   *
+   * @throws RuntimeException if the FXML file cannot be loaded
+   */
   private void loadMainView()
   {
     try
@@ -157,6 +185,11 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Loads the trip view from FXML and initializes its controller.
+   *
+   * @throws RuntimeException if the FXML file cannot be loaded
+   */
   private void loadTripView()
   {
     try
@@ -174,6 +207,11 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Loads the add trip view from FXML and initializes its controller.
+   *
+   * @throws RuntimeException if the FXML file cannot be loaded
+   */
   private void loadAddTripView()
   {
     try
@@ -191,6 +229,11 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Loads the chauffeur view from FXML and initializes its controller.
+   *
+   * @throws RuntimeException if the FXML file cannot be loaded
+   */
   private void loadChauffeurView()
   {
     try
@@ -208,6 +251,11 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Loads the add chauffeur view from FXML and initializes its controller.
+   *
+   * @throws RuntimeException if the FXML file cannot be loaded
+   */
   private void loadAddChauffeurView()
   {
     try
@@ -225,6 +273,11 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Loads the bus view from FXML and initializes its controller.
+   *
+   * @throws RuntimeException if the FXML file cannot be loaded
+   */
   private void loadViewBus()
   {
     try
@@ -241,6 +294,11 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Loads the add bus view from FXML and initializes its controller.
+   *
+   * @throws RuntimeException if the FXML file cannot be loaded
+   */
   private void loadViewAddBus()
   {
     try
@@ -257,6 +315,11 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Loads the customer view from FXML and initializes its controller.
+   *
+   * @throws RuntimeException if the FXML file cannot be loaded
+   */
   private void loadCustomerView()
   {
     try
@@ -274,6 +337,11 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Displays an error alert dialog with the specified message.
+   *
+   * @param message the error message to display
+   */
   private void showMessage(String message)
   {
     Alert alert = new Alert(Alert.AlertType.ERROR);
