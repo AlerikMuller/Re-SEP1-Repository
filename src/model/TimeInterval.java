@@ -1,5 +1,14 @@
 package model;
 
+/**
+ * Represents a period between a starting time and an ending time.
+ * The class stores both boundaries and provides overlap detection,
+ * including support for time intervals that continue across midnight.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Represents daily time ranges and supports overlap detection across midnight.
 public class TimeInterval
 {

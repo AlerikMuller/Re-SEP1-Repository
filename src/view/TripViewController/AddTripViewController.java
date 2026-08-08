@@ -26,6 +26,16 @@ import view.ViewHandler;
 
 import java.time.LocalDate;
 
+/**
+ * Controls the view used for registering new trips in the system.
+ * The controller handles trip input, customer and resource selection,
+ * date and time validation, overlap detection for buses and chauffeurs,
+ * persistent trip registration, form clearing, and navigation.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Controls trip registration, resource selection, validation, and navigation actions.
 public class AddTripViewController
 {

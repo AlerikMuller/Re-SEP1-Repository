@@ -19,6 +19,16 @@ import view.ViewHandler;
 
 import java.time.LocalDate;
 
+/**
+ * Controls the view used for registering new chauffeurs in the system.
+ * The controller handles user input, chauffeur and driver license
+ * validation, optional work schedule creation, persistent saving, and
+ * navigation between the chauffeur registration view and main menu.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Controls chauffeur registration, validation, optional schedules, and navigation actions.
 public class AddChauffeurViewController
 {

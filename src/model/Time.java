@@ -1,5 +1,14 @@
 package model;
 
+/**
+ * Represents a time of day used for trips and chauffeur schedules.
+ * The class stores hours, minutes, and seconds while validating the
+ * values and providing chronological comparison operations between times.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Represents validated twenty-four-hour time values with second precision.
 public class Time implements Comparable<Time> {
     private int hour;

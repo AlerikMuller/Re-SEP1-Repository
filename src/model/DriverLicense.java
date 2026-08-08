@@ -1,5 +1,14 @@
 package model;
 
+/**
+ * Represents the driver license belonging to a registered chauffeur.
+ * The class stores the license number and the supported bus license
+ * type used when managing chauffeur qualifications in the system.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Stores chauffeur license number and supported bus license permissions.
 public class DriverLicense {
     private String licenseNo;

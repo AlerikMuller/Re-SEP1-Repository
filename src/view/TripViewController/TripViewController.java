@@ -31,6 +31,16 @@ import view.ViewHandler;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * Controls the view used for managing registered trips in the system.
+ * The controller displays trip information, allows supported trip editing
+ * and removal, manages resource and customer selections, validates date
+ * and time intervals, detects overlapping assignments, and filters ended trips.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Controls trip overview, editing, removal, filtering, and resource reassignment.
 public class TripViewController
 {

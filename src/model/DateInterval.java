@@ -1,5 +1,14 @@
 package model;
 
+/**
+ * Represents a period between a starting date and an ending date.
+ * The class validates the chronological order of the dates and provides
+ * operations for checking future dates and overlapping date intervals.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Represents an inclusive start and end date for activities.
 public class DateInterval {
     private Date startDate;

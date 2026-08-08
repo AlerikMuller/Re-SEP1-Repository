@@ -1,5 +1,15 @@
 package model;
 
+/**
+ * Represents a bus used by Horsens Tours and stores the information
+ * needed for registration, management, and assignment to trips.
+ * The class keeps track of registration number, bus type, rental
+ * price, seat capacity, and whether the bus is currently available.
+ *
+ * author Alerik Muller
+ * version 1.0
+ */
+
 //Stores bus details used for registration, planning, and assignment.
 public class Bus {
     private String regNo;

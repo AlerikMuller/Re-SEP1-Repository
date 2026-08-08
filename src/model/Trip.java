@@ -1,5 +1,16 @@
 package model;
 
+/**
+ * Represents a trip registered in the Horsens Tours planning system.
+ * The class stores route information, status, date and time intervals,
+ * the assigned bus and chauffeur, and an optional associated customer.
+ * It also provides operations for assignment, editing, removal, and
+ * detecting overlaps with other registered trips.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Stores trip details, assigned resources, intervals, status, and customer.
 public class Trip
 {

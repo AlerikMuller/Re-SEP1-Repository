@@ -1,5 +1,14 @@
 package model;
 
+/**
+ * Represents a work schedule belonging to a registered chauffeur.
+ * The class stores the scheduled day, current schedule status, date
+ * interval, and optional time interval used when checking availability.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Stores chauffeur schedule day, status, date interval, and time.
 public class WorkSchedule {
     private String day;

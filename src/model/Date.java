@@ -2,6 +2,15 @@ package model;
 
 import java.time.LocalDate;
 
+/**
+ * Represents a calendar date used throughout the trip planning system.
+ * The class stores day, month, and year values and provides validation
+ * and comparison operations for working with dates chronologically.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Ensures customer phone numbers contain digits and are not empty.
 public class Date implements Comparable<Date> {
     private int day;

@@ -2,6 +2,16 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a chauffeur employed by Horsens Tours and stores the
+ * information needed for planning and trip assignments. The class
+ * manages personal details, experience, preferences, availability,
+ * suitability, driver license information, and work schedules.
+ *
+ * @author Alerik Muller
+ * version 1.0
+ */
+
 //Stores chauffeur details, availability, suitability, licenses, and work schedules.
 public class Chauffeur
 {

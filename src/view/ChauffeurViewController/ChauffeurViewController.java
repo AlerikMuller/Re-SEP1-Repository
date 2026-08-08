@@ -27,6 +27,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * Controls the view used for managing existing chauffeurs in the system.
+ * The controller displays chauffeur information, handles chauffeur editing
+ * and removal, manages work schedule creation, validates entered values,
+ * refreshes the chauffeur table, and saves changes persistently.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Controls chauffeur viewing, editing, removal, schedules, and table interaction.
 public class ChauffeurViewController
 {

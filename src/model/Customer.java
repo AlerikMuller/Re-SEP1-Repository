@@ -1,5 +1,14 @@
 package model;
 
+/**
+ * Represents a customer registered in the Horsens Tours system.
+ * The class stores the customer's name and phone number so the
+ * customer can be managed and optionally connected to registered trips.
+ *
+ * @author Alerik Muller
+ * @version 1.0
+ */
+
 //Stores the basic customer information used throughout trip planning.
 public class Customer {
     private String name;
