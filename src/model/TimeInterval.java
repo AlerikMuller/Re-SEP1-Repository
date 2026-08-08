@@ -8,18 +8,28 @@ package model;
  * @author Alerik Muller
  * @version 1.0
  */
-
-//Represents daily time ranges and supports overlap detection across midnight.
 public class TimeInterval
 {
     private Time startTime;
     private Time endTime;
 
+    /**
+     * Creates a time interval with the given starting and ending times.
+     *
+     * @param startTime the beginning of the interval
+     * @param endTime the end of the interval
+     */
     public TimeInterval(Time startTime, Time endTime)
     {
         setTimeInterval(startTime, endTime);
     }
 
+    /**
+     * Sets the starting time of the interval.
+     *
+     * @param time the new starting time
+     * @throws IllegalArgumentException if the time is {@code null}
+     */
     public void setStartTime(Time time)
     {
         if (time == null)
@@ -30,11 +40,22 @@ public class TimeInterval
         this.startTime = time;
     }
 
+    /**
+     * Returns the starting time of the interval.
+     *
+     * @return the starting time
+     */
     public Time getStartTime()
     {
         return startTime;
     }
 
+    /**
+     * Sets the ending time of the interval.
+     *
+     * @param time the new ending time
+     * @throws IllegalArgumentException if the time is {@code null}
+     */
     public void setEndTime(Time time)
     {
         if (time == null)
@@ -45,12 +66,23 @@ public class TimeInterval
         this.endTime = time;
     }
 
+    /**
+     * Returns the ending time of the interval.
+     *
+     * @return the ending time
+     */
     public Time getEndTime()
     {
         return endTime;
     }
 
-    //Requires both time boundaries before storing the complete interval.
+    /**
+     * Sets both time boundaries after ensuring neither value is {@code null}.
+     *
+     * @param startTime the beginning of the interval
+     * @param endTime the end of the interval
+     * @throws IllegalArgumentException if either time is {@code null}
+     */
     public void setTimeInterval(Time startTime, Time endTime)
     {
         if (startTime == null || endTime == null)
@@ -62,12 +94,24 @@ public class TimeInterval
         this.endTime = endTime;
     }
 
+    /**
+     * Checks whether both boundaries of the interval have been assigned.
+     *
+     * @return {@code true} if both start and end times exist
+     */
     public boolean isValid()
     {
         return startTime != null && endTime != null;
     }
 
-    //Compares split time segments to detect shared occupied periods.
+    /**
+     * Checks whether this time interval overlaps another interval.
+     * Intervals that pass midnight are divided into separate ranges.
+     *
+     * @param other the interval to compare with
+     * @return {@code true} if the two intervals overlap
+     * @throws IllegalArgumentException if the other interval is {@code null}
+     */
     public boolean overlaps(TimeInterval other)
     {
         if (other == null)
@@ -92,7 +136,13 @@ public class TimeInterval
         return false;
     }
 
-    //Splits overnight intervals into comparable segments around midnight.
+    /**
+     * Converts an interval into one or two second-based ranges.
+     * Overnight intervals are split at midnight for easier comparison.
+     *
+     * @param interval the time interval to convert
+     * @return an array containing the comparable time ranges
+     */
     private int[][] toRanges(TimeInterval interval)
     {
         int start = toSeconds(interval.startTime);
@@ -111,11 +161,22 @@ public class TimeInterval
         return new int[][]{{0, 86400}};
     }
 
+    /**
+     * Converts a time into its total number of seconds after midnight.
+     *
+     * @param time the time to convert
+     * @return the total number of seconds represented by the time
+     */
     private int toSeconds(Time time)
     {
         return time.getHour() * 3600 + time.getMinute() * 60 + time.getSecond();
     }
 
+    /**
+     * Returns the starting and ending times as a readable interval.
+     *
+     * @return a string representation of the time interval
+     */
     @Override
     public String toString()
     {

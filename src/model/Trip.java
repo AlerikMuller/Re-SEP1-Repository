@@ -10,8 +10,6 @@ package model;
  * @author Alerik Muller
  * @version 1.0
  */
-
-//Stores trip details, assigned resources, intervals, status, and customer.
 public class Trip
 {
     private String origin;
@@ -23,10 +21,24 @@ public class Trip
     private TimeInterval timeInterval;
     private Customer customer;
 
+    /**
+     * Creates an empty trip without assigning any initial information.
+     */
     public Trip()
     {
     }
 
+    /**
+     * Creates a trip with route, status, resources, and date-time intervals.
+     *
+     * @param origin the trip origin
+     * @param destination the trip destination
+     * @param status the trip status
+     * @param assignedBus the bus assigned to the trip
+     * @param assignedChauffeur the chauffeur assigned to the trip
+     * @param dateInterval the trip date interval
+     * @param timeInterval the trip time interval
+     */
     public Trip(String origin, String destination, String status, Bus assignedBus, Chauffeur assignedChauffeur, DateInterval dateInterval, TimeInterval timeInterval)
     {
         setOrigin(origin);
@@ -38,6 +50,16 @@ public class Trip
         setTimeInterval(timeInterval);
     }
 
+    /**
+     * Creates a trip containing route, status, and date-time information
+     * without initially assigning a bus or chauffeur.
+     *
+     * @param origin the trip origin
+     * @param destination the trip destination
+     * @param status the trip status
+     * @param dateInterval the trip date interval
+     * @param timeInterval the trip time interval
+     */
     public Trip(String origin, String destination, String status, DateInterval dateInterval, TimeInterval timeInterval)
     {
         setOrigin(origin);
@@ -47,12 +69,30 @@ public class Trip
         setTimeInterval(timeInterval);
     }
 
+    /**
+     * Creates a complete trip including assigned resources and an optional customer.
+     *
+     * @param origin the trip origin
+     * @param destination the trip destination
+     * @param status the trip status
+     * @param assignedBus the bus assigned to the trip
+     * @param assignedChauffeur the chauffeur assigned to the trip
+     * @param dateInterval the trip date interval
+     * @param timeInterval the trip time interval
+     * @param customer the customer associated with the trip
+     */
     public Trip(String origin, String destination, String status, Bus assignedBus, Chauffeur assignedChauffeur, DateInterval dateInterval, TimeInterval timeInterval, Customer customer)
     {
         this(origin, destination, status, assignedBus, assignedChauffeur, dateInterval, timeInterval);
         setCustomer(customer);
     }
 
+    /**
+     * Sets the origin address of the trip.
+     *
+     * @param originAddress the origin address to store
+     * @throws IllegalArgumentException if the origin is null or empty
+     */
     public void setOrigin(String originAddress)
     {
         if (originAddress == null || originAddress.trim().isEmpty())
@@ -63,11 +103,22 @@ public class Trip
         this.origin = originAddress.trim();
     }
 
+    /**
+     * Returns the origin address of the trip.
+     *
+     * @return the trip origin
+     */
     public String getOrigin()
     {
         return origin;
     }
 
+    /**
+     * Sets the destination address of the trip.
+     *
+     * @param destination the destination address to store
+     * @throws IllegalArgumentException if the destination is null or empty
+     */
     public void setDestination(String destination)
     {
         if (destination == null || destination.trim().isEmpty())
@@ -78,12 +129,22 @@ public class Trip
         this.destination = destination.trim();
     }
 
+    /**
+     * Returns the destination address of the trip.
+     *
+     * @return the trip destination
+     */
     public String getDestination()
     {
         return destination;
     }
 
-    //Restricts trip status to the four supported workflow states.
+    /**
+     * Sets the trip status to one of the supported workflow states.
+     *
+     * @param status the status to store
+     * @throws IllegalArgumentException if the status is null, empty, or unsupported
+     */
     public void setStatus(String status)
     {
         if (status == null || status.trim().isEmpty())
@@ -114,12 +175,22 @@ public class Trip
         }
     }
 
+    /**
+     * Returns the current status of the trip.
+     *
+     * @return the trip status
+     */
     public String getStatus()
     {
         return status;
     }
 
-    //Assigns a required bus after preventing null resource references.
+    /**
+     * Assigns a bus to the trip.
+     *
+     * @param bus the bus to assign
+     * @throws IllegalArgumentException if the bus is {@code null}
+     */
     public void assignBus(Bus bus)
     {
         if (bus == null)
@@ -130,17 +201,32 @@ public class Trip
         this.assignedBus = bus;
     }
 
+    /**
+     * Checks whether a bus is currently assigned to the trip.
+     *
+     * @return {@code true} if a bus is assigned, otherwise {@code false}
+     */
     public boolean isBusAssigned()
     {
         return assignedBus != null;
     }
 
+    /**
+     * Returns the bus currently assigned to the trip.
+     *
+     * @return the assigned bus
+     */
     public Bus getAssignedBus()
     {
         return assignedBus;
     }
 
-    //Assigns a required chauffeur after preventing null resource references.
+    /**
+     * Assigns a chauffeur to the trip.
+     *
+     * @param chauffeur the chauffeur to assign
+     * @throws IllegalArgumentException if the chauffeur is {@code null}
+     */
     public void assignChauffeur(Chauffeur chauffeur)
     {
         if (chauffeur == null)
@@ -151,11 +237,22 @@ public class Trip
         this.assignedChauffeur = chauffeur;
     }
 
+    /**
+     * Returns the chauffeur currently assigned to the trip.
+     *
+     * @return the assigned chauffeur
+     */
     public Chauffeur getAssignedChauffeur()
     {
         return assignedChauffeur;
     }
 
+    /**
+     * Sets the date interval of the trip.
+     *
+     * @param dateInterval the date interval to assign
+     * @throws IllegalArgumentException if the interval is {@code null}
+     */
     public void setDateInterval(DateInterval dateInterval)
     {
         if (dateInterval == null)
@@ -166,16 +263,32 @@ public class Trip
         this.dateInterval = dateInterval;
     }
 
+    /**
+     * Returns the date interval of the trip.
+     *
+     * @return the trip date interval
+     */
     public DateInterval getDateInterval()
     {
         return dateInterval;
     }
 
+    /**
+     * Returns the date interval of the trip.
+     *
+     * @return the trip date interval
+     */
     public String getDateIntervalString()
     {
         return dateInterval == null ? "" : dateInterval.toString();
     }
 
+    /**
+     * Sets the time interval of the trip.
+     *
+     * @param timeInterval the time interval to assign
+     * @throws IllegalArgumentException if the interval is {@code null}
+     */
     public void setTimeInterval(TimeInterval timeInterval)
     {
         if (timeInterval == null)
@@ -186,54 +299,102 @@ public class Trip
         this.timeInterval = timeInterval;
     }
 
+    /**
+     * Returns the time interval of the trip.
+     *
+     * @return the trip time interval
+     */
     public TimeInterval getTimeInterval()
     {
         return timeInterval;
     }
 
+    /**
+     * Returns the time interval as a displayable string.
+     *
+     * @return the time interval string, or an empty string if none exists
+     */
     public String getTimeIntervalString()
     {
         return timeInterval == null ? "" : timeInterval.toString();
     }
 
+    /**
+     * Creates and assigns a customer using the supplied name and phone number.
+     *
+     * @param name the customer's name
+     * @param phone the customer's phone number
+     */
     public void setCustomer(String name, String phone)
     {
         this.customer = new Customer(name, phone);
     }
 
+    /**
+     * Returns the customer associated with the trip.
+     *
+     * @return the associated customer, or {@code null} if none is assigned
+     */
     public Customer getCustomer()
     {
         return customer;
     }
 
+    /**
+     * Assigns an existing customer to the trip.
+     *
+     * @param customer the customer to associate, or {@code null} to remove the association
+     */
     public void setCustomer(Customer customer)
     {
         this.customer = customer;
     }
 
+    /**
+     * Removes the currently associated customer from the trip.
+     */
     public void removeCustomer()
     {
         this.customer = null;
     }
 
-    //Allows editing unless the trip currently has Started status.
+    /**
+     * Checks whether the trip may be edited according to its current status.
+     *
+     * @return {@code true} for Not Started, Cancelled, or Ended trips
+     */
     public boolean canBeEdited()
     {
         return status.equals("Not Started") || status.equals("Cancelled") || status.equals("Ended");
     }
 
-    //Allows removal unless the trip currently has Started status.
+    /**
+     * Checks whether the trip may be removed according to its current status.
+     *
+     * @return {@code true} for Not Started, Cancelled, or Ended trips
+     */
     public boolean canBeRemoved()
     {
         return status.equals("Not Started") || status.equals("Cancelled") || status.equals("Ended");
     }
 
+    /**
+     * Checks whether the trip is considered to have started or ended.
+     *
+     * @return {@code true} if the status is Started or Ended
+     */
     public boolean hasStarted()
     {
         return status.equals("Started") || status.equals("Ended");
     }
 
-    //Checks whether another trip overlaps both date and time.
+    /**
+     * Checks whether this trip overlaps another trip in both date and time.
+     *
+     * @param other the trip to compare with
+     * @return {@code true} if both the date and time intervals overlap
+     * @throws IllegalArgumentException if the other trip is {@code null}
+     */
     public boolean overlaps(Trip other)
     {
         if (other == null)
@@ -244,6 +405,11 @@ public class Trip
         return this.dateInterval.overlaps(other.dateInterval) && this.timeInterval.overlaps(other.timeInterval);
     }
 
+    /**
+     * Returns a string containing the stored trip information and assignments.
+     *
+     * @return a string representation of the trip
+     */
     @Override
     public String toString()
     {
