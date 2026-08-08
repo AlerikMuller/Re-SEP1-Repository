@@ -6,8 +6,8 @@ package model;
  * The class keeps track of registration number, bus type, rental
  * price, seat capacity, and whether the bus is currently available.
  *
- * author Alerik Muller
- * version 1.0
+ * @author Alerik Muller
+ * @version 1.0
  */
 
 //Stores bus details used for registration, planning, and assignment.

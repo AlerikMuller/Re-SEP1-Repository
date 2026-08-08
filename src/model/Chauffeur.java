@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * suitability, driver license information, and work schedules.
  *
  * @author Alerik Muller
- * version 1.0
+ * @version 1.0
  */
 
 //Stores chauffeur details, availability, suitability, licenses, and work schedules.
