@@ -18,7 +18,7 @@
     <top>
         <VBox alignment="CENTER" prefHeight="80.0" prefWidth="620.0" spacing="6.0" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Add New Trip">
+                <Label text="Add Trip">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>

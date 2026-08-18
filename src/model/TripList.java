@@ -129,6 +129,39 @@ public class TripList {
         }
     }
 
+    public void changeUsualTripStatus(Trip tripToUpdate)
+    {
+        for (Trip trip : trips)
+        {
+            if (trip.getOrigin().equals(tripToUpdate.getOrigin())
+                    || trip.getDestination().equals(tripToUpdate.getDestination())
+                    || trip.getAssignedBus() == tripToUpdate.getAssignedBus()
+                    || trip.getAssignedChauffeur() == tripToUpdate.getAssignedChauffeur()
+                    || trip.getDateInterval() == tripToUpdate.getDateInterval()
+                    || trip.getTimeInterval() == tripToUpdate.getTimeInterval())
+            {
+                trip.setStatus(tripToUpdate.getStatus());
+            }
+        }
+    }
+
+    public void changeCustomerTripStatus(Trip tripToUpdate)
+    {
+        for (Trip trip : trips)
+        {
+            if (trip.getOrigin().equals(tripToUpdate.getOrigin())
+                    || trip.getDestination().equals(tripToUpdate.getDestination())
+                    || trip.getAssignedBus() == tripToUpdate.getAssignedBus()
+                    || trip.getAssignedChauffeur() == tripToUpdate.getAssignedChauffeur()
+                    || trip.getDateInterval() == tripToUpdate.getDateInterval()
+                    || trip.getTimeInterval() == tripToUpdate.getTimeInterval()
+                    || trip.getCustomer() == tripToUpdate.getCustomer())
+            {
+                trip.setStatus(tripToUpdate.getStatus());
+            }
+        }
+    }
+
     /**
      * Checks whether the given bus or chauffeur is already assigned to another trip whose
      * date and time interval overlaps the given intervals. This implements the

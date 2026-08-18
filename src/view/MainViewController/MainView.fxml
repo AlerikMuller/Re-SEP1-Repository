@@ -58,7 +58,7 @@
 
                     <Button fx:id="addChauffeurButton" onAction="#handleActions" prefWidth="150.0" text="Add Chauffeur" GridPane.rowIndex="3" />
                     <Button fx:id="manageChauffeurButton" onAction="#handleActions" prefWidth="150.0" text="Manage Chauffeur" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-               <Button fx:id="addNewTripButton" mnemonicParsing="false" onAction="#handleActions" prefHeight="26.0" prefWidth="150.0" text="Add new trip" GridPane.rowIndex="2" />
+               <Button fx:id="addNewTripButton" mnemonicParsing="false" onAction="#handleActions" prefHeight="26.0" prefWidth="150.0" text="Add Trip" GridPane.rowIndex="2" />
                <Button fx:id="manageTripButton" mnemonicParsing="false" onAction="#handleActions" prefHeight="26.0" prefWidth="151.0" text="Manage Trip" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 </children>
             <columnConstraints>
