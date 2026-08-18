@@ -165,11 +165,28 @@ public class TripList {
      */
     public TripList getTripsForBus(Bus bus) {
         TripList result = new TripList();
+
+        // Let n represent the number of trips in the original list.
+        // This loop can run n times because every trip may need checking.
         for (Trip trip : trips) {
+
+            // Comparing the bus with the assigned bus takes constant time, O(1).
             if (bus.equals(trip.getAssignedBus())) {
+
+                // addTrip() loops through the current result list before adding.
+                // In the worst case, every original trip matches this bus.
+                // The result list therefore grows from 0 up to n - 1 trips.
                 result.addTrip(trip);
             }
         }
+
+        // Worst case:
+        // T(n) = n + (0 + 1 + 2 + ... + (n - 1))
+        // T(n) = n + n(n - 1) / 2
+        // Ignoring constants and lower-order terms gives T(n) = O(n^2).
+        //
+        // Best case: O(n), when no trips match the given bus.
+        // Worst case: O(n^2), when every trip matches the given bus.
         return result;
     }
 

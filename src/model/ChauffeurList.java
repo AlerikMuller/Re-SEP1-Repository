@@ -112,14 +112,35 @@ public class ChauffeurList {
      */
     public ChauffeurList getSuitableChauffeurs(DateInterval dateInterval, TimeInterval timeInterval, String preference) {
         ChauffeurList suitable = new ChauffeurList();
+
+        // Let n represent the number of chauffeurs in the list.
+        // Let m represent the maximum number of schedules for one chauffeur.
+        // This loop checks all n chauffeurs.
         for (Chauffeur chauffeur : chauffeurs) {
+
+            // isAvailableFor() may loop through all m work schedules.
+            // Therefore, this operation has a worst-case complexity of O(m).
             boolean isAvailable = chauffeur.isAvailableFor(dateInterval, timeInterval);
+
+            // The preference checks are treated as constant-time operations, O(1).
             boolean matchesPreference = preference == null || preference.isEmpty()
                     || chauffeur.getPreferenceNotes().equalsIgnoreCase(preference);
             if (isAvailable && matchesPreference) {
+
+                // addChauffeur() adds directly to an ArrayList, which is O(1)
+                // on average for each addition.
                 suitable.addChauffeur(chauffeur);
             }
         }
+
+        // Worst case:
+        // T(n, m) = n * (m + 1)
+        // T(n, m) = nm + n
+        // Ignoring constants and lower-order terms gives T(n, m) = O(nm).
+        //
+        // If n and m grow at the same rate, O(nm) becomes O(n^2).
+        // Best case: O(n), when availability checks return immediately.
+        // Worst case: O(nm), when every chauffeur's schedules must be checked.
         return suitable;
     }
 
